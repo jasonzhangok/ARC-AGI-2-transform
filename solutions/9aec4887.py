@@ -48,4 +48,5 @@ def transform(grid):
                        if distance == nearest]
             out[r + 1][c + 1] = (side_colors[closest[0]]
                                   if len(closest) == 1 else 8)
-    return out
+    output = out
+    return output

@@ -24,8 +24,9 @@ def transform(grid):
         c0, c1 = min(c for _, c in points), max(c for _, c in points)
         tiles.append([grid[r][c0 : c1 + 1] for r in range(r0, r1 + 1)])
 
-    return [
+    output = [
         tiles[0][r] + tiles[1][r] for r in range(3)
     ] + [
         tiles[2][r] + tiles[3][r] for r in range(3)
     ]
+    return output

@@ -1,4 +1,3 @@
-from collections import Counter
 
 
 def transform(grid):
@@ -31,8 +30,12 @@ def transform(grid):
         fours = [(row, col) for row, col, value in component if value == 4]
         if not fours:
             continue
-        row_counts = Counter(row for row, _ in fours)
-        col_counts = Counter(col for _, col in fours)
+        row_counts = {}
+        for cell_value in (row for row, _ in fours):
+            row_counts[cell_value] = row_counts.get(cell_value, 0) + 1
+        col_counts = {}
+        for cell_value in (col for _, col in fours):
+            col_counts[cell_value] = col_counts.get(cell_value, 0) + 1
         horizontal = max(row_counts.values()) >= max(col_counts.values())
         axis = (
             max(row_counts, key=row_counts.get)

@@ -20,4 +20,5 @@ def transform(grid):
                 row in clear_rows or column in clear_columns
             ):
                 result[row][column] = 3
-    return result
+    output = result
+    return output

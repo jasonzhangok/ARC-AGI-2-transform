@@ -34,4 +34,5 @@ def transform(grid):
                 else:
                     result[r][c] = 9
 
-    return result
+    output = result
+    return output

@@ -1,10 +1,12 @@
-from collections import Counter
 
 
 def transform(grid):
     h, w = len(grid), len(grid[0])
-    background = Counter(value for row in grid for value in row).most_common(1)[0][0]
-    colors = [value for value in Counter(value for row in grid for value in row) if value != background]
+    counts = {}
+    for cell_value in (value for row in grid for value in row):
+        counts[cell_value] = counts.get(cell_value, 0) + 1
+    background = max(counts, key=counts.get)
+    colors = [value for value in counts if value != background]
     boxes = []
     for color in colors:
         cells = [(r, c) for r, row in enumerate(grid) for c, value in enumerate(row) if value == color]

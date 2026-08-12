@@ -14,4 +14,5 @@ def transform(grid):
         seq=next(s for s in templates if color in s);start=c-seq.index(color)
         for i,v in enumerate(seq):
             if 0<=start+i<w:out[r][start+i]=v
-    return out
+    output = out
+    return output

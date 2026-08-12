@@ -11,4 +11,5 @@ def transform(grid):
                     grid[r-3][c] == grid[r-2][c] == 1 and
                     grid[r+2][c] == grid[r+3][c] == 1):
                 out[r][c] = 4
-    return out
+    output = out
+    return output

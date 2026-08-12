@@ -1,5 +1,5 @@
 def transform(grid):
-    height, width = len(grid), len(grid[0])
+    height, width = (len(grid), len(grid[0]))
     seen = set()
     components = []
     for row in range(height):
@@ -16,22 +16,14 @@ def transform(grid):
                     next_row = current_row + row_step
                     next_col = current_col + col_step
                     next_cell = (next_row, next_col)
-                    if (
-                        0 <= next_row < height
-                        and 0 <= next_col < width
-                        and next_cell not in seen
-                        and grid[next_row][next_col] != 0
-                    ):
+                    if 0 <= next_row < height and 0 <= next_col < width and (next_cell not in seen) and (grid[next_row][next_col] != 0):
                         seen.add(next_cell)
                         stack.append(next_cell)
             components.append(component)
-
-    selected = max(
-        components,
-        key=lambda component: sum(grid[row][col] == 2 for row, col in component),
-    )
-    top = min(row for row, _ in selected)
-    bottom = max(row for row, _ in selected)
-    left = min(col for _, col in selected)
-    right = max(col for _, col in selected)
-    return [grid[row][left:right + 1] for row in range(top, bottom + 1)]
+    selected = max(((sum((grid[row][col] == 2 for row, col in _key_item_1)), -_key_index_1, _key_item_1) for _key_index_1, _key_item_1 in enumerate(components)))[2]
+    top = min((row for row, _ in selected))
+    bottom = max((row for row, _ in selected))
+    left = min((col for _, col in selected))
+    right = max((col for _, col in selected))
+    output = [grid[row][left:right + 1] for row in range(top, bottom + 1)]
+    return output

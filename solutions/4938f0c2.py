@@ -10,4 +10,5 @@ def transform(grid):
                      (row_sum - r, col_sum - c)):
             if 0 <= y < h and 0 <= x < w:
                 out[y][x] = 2
-    return out
+    output = out
+    return output

@@ -10,4 +10,5 @@ def transform(grid):
             out[r][c] = cycle[d % 4]
     if min(r1 - r0 + 1, c1 - c0 + 1) == 9:
         out[(r0 + r1) // 2][(c0 + c1) // 2] = 0
-    return out
+    output = out
+    return output

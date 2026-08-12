@@ -14,10 +14,9 @@ def transform(grid):
         while pending:
             row, col = pending.pop()
             for neighbor in (
-                (row - 1, col),
-                (row + 1, col),
-                (row, col - 1),
-                (row, col + 1),
+                (row - 1, col - 1), (row - 1, col), (row - 1, col + 1),
+                (row, col - 1), (row, col + 1),
+                (row + 1, col - 1), (row + 1, col), (row + 1, col + 1),
             ):
                 if neighbor in remaining:
                     remaining.remove(neighbor)
@@ -25,7 +24,7 @@ def transform(grid):
                     pending.append(neighbor)
         components.append(component)
 
-    smallest = min(map(len, components))
+    smallest = min(len(component) for component in components)
     output = [row[:] for row in grid]
     for component in components:
         color = 2 if len(component) == smallest else 1

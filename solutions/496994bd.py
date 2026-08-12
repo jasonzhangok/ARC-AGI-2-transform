@@ -5,4 +5,5 @@ def transform(grid):
         used += 1
     for i in range(used):
         out[len(grid) - used + i] = grid[used - 1 - i][:]
-    return out
+    output = out
+    return output

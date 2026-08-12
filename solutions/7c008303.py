@@ -10,5 +10,6 @@ def transform(grid):
     pieces = [[row[c0:c1] for row in grid[r0:r1]] for r0, r1, c0, c1 in regions]
     key = next(p for p in pieces if len(p) == 2 and len(p[0]) == 2)
     target = next(p for p in pieces if len(p) == 6 and len(p[0]) == 6)
-    return [[key[r // 3][c // 3] if target[r][c] == 3 else 0
+    output = [[key[r // 3][c // 3] if target[r][c] == 3 else 0
              for c in range(6)] for r in range(6)]
+    return output

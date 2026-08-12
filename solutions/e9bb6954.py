@@ -18,4 +18,5 @@ def transform(grid):
         for _, c, _ in objects:
             if not any(orow == r and ocol == c for orow, ocol, _ in objects):
                 out[r][c] = 0
-    return out
+    output = out
+    return output

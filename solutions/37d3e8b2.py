@@ -39,4 +39,5 @@ def transform(grid):
         color = {1: 1, 2: 2, 3: 3, 4: 7}[holes]
         for r, c in component:
             result[r][c] = color
-    return result
+    output = result
+    return output

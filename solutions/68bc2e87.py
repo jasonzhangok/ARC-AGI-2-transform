@@ -1,4 +1,4 @@
-def transform(grid: list[list[int]]) -> list[list[int]]:
+def transform(grid):
     """Return the colored rectangle outlines from bottom layer to top layer."""
     background = 8
     colors = sorted({value for row in grid for value in row if value != background})
@@ -18,21 +18,20 @@ def transform(grid: list[list[int]]) -> list[list[int]]:
             max(column for _, column in cells),
         )
 
-    def is_on_outline(color: int, row: int, column: int) -> bool:
-        top, bottom, left, right = bounds[color]
-        return (
-            top <= row <= bottom
-            and left <= column <= right
-            and (row == top or row == bottom or column == left or column == right)
-        )
-
     above: dict[int, set[int]] = {color: set() for color in colors}
     for row_index, row in enumerate(grid):
         for column_index, visible_color in enumerate(row):
             outlines_here = [
                 color
                 for color in colors
-                if is_on_outline(color, row_index, column_index)
+                if bounds[color][0] <= row_index <= bounds[color][1]
+                and bounds[color][2] <= column_index <= bounds[color][3]
+                and (
+                    row_index == bounds[color][0]
+                    or row_index == bounds[color][1]
+                    or column_index == bounds[color][2]
+                    or column_index == bounds[color][3]
+                )
             ]
             if len(outlines_here) > 1 and visible_color in outlines_here:
                 for covered_color in outlines_here:
@@ -47,7 +46,7 @@ def transform(grid: list[list[int]]) -> list[list[int]]:
     order: list[int] = []
     available = [color for color in colors if incoming[color] == 0]
     while available:
-        color = min(available, key=lambda item: (*bounds[item], item))
+        color = min([((*bounds[item], item), item) for item in available])[1]
         available.remove(color)
         order.append(color)
         for upper_color in above[color]:
@@ -55,4 +54,5 @@ def transform(grid: list[list[int]]) -> list[list[int]]:
             if incoming[upper_color] == 0:
                 available.append(upper_color)
 
-    return [[color] for color in order]
+    output = [[color] for color in order]
+    return output

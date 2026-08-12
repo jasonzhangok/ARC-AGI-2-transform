@@ -22,4 +22,5 @@ def transform(grid):
         row.append(2)
         out.append(row)
     out.append([2] * (c1 - c0 + 1))
-    return out
+    output = out
+    return output

@@ -9,4 +9,5 @@ def transform(grid):
     for r in hrs:out[r]=[color]*w
     for c in cs:
         for r in range(h):out[r][c]=color
-    return out
+    output = out
+    return output

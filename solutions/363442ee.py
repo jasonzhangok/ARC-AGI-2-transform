@@ -6,4 +6,5 @@ def transform(grid):
         for dr in range(-1, 2):
             for dc in range(-1, 2):
                 result[center_r + dr][center_c + dc] = template[dr + 1][dc + 1]
-    return result
+    output = result
+    return output

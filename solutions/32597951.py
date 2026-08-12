@@ -9,4 +9,5 @@ def transform(grid):
         for c in range(left, right + 1):
             if result[r][c] == 1:
                 result[r][c] = 3
-    return result
+    output = result
+    return output

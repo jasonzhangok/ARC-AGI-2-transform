@@ -6,4 +6,5 @@ def transform(grid):
             if r1>r0 and c1>c0 and {(r0,c1),(r1,c0)}<=marks:
                 for r in range(r0+1,r1):
                     for c in range(c0+1,c1): out[r][c]=2
-    return out
+    output = out
+    return output

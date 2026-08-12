@@ -1,71 +1,81 @@
 def transform(grid):
     height = len(grid)
     width = len(grid[0])
-
     markers = []
     for top in range(height - 2):
         for left in range(width - 2):
-            corners = [
-                (top, left),
-                (top, left + 2),
-                (top + 2, left),
-                (top + 2, left + 2),
-            ]
-            present = [cell for cell in corners if grid[cell[0]][cell[1]] == 4]
+            corners = [(top, left), (top, left + 2),
+                       (top + 2, left), (top + 2, left + 2)]
+            present = []
+            for corner in corners:
+                if grid[corner[0]][corner[1]] == 4:
+                    present.append(corner)
             if len(present) == 3:
-                missing = next(cell for cell in corners if cell not in present)
-                markers.append((top, left, missing))
+                for corner in corners:
+                    if corner not in present:
+                        markers.append((top, left, corner))
 
-    source = next(marker for marker in markers if grid[marker[2][0]][marker[2][1]] == 2)
+    raw_template = []
+    for row in range(height):
+        for column in range(width):
+            if grid[row][column] == 2:
+                raw_template.append((row, column))
+    source = markers[0]
+    source_distance = height + width
+    for marker in markers:
+        anchor = marker[2]
+        distance = min(abs(row - anchor[0]) + abs(column - anchor[1])
+                       for row, column in raw_template)
+        if distance < source_distance:
+            source = marker
+            source_distance = distance
     source_anchor = source[2]
 
-    raw_template = {
-        (row, col)
-        for row in range(height)
-        for col in range(width)
-        if grid[row][col] == 2
-    }
-
-    # Keep the parts visible from the marked anchor along rows or columns.
-    # The diagonally opposite extreme corner is retained as the far endpoint.
     template = set()
-    for row in {row for row, _ in raw_template}:
-        cells = [(row, col) for r, col in raw_template if r == row]
-        template.add(min(cells, key=lambda cell: abs(cell[1] - source_anchor[1])))
-    for col in {col for _, col in raw_template}:
-        cells = [(row, col) for row, c in raw_template if c == col]
-        template.add(min(cells, key=lambda cell: abs(cell[0] - source_anchor[0])))
-    farthest = max(
-        abs(row - source_anchor[0]) + abs(col - source_anchor[1])
-        for row, col in raw_template
-    )
-    template.update(
-        (row, col)
-        for row, col in raw_template
-        if abs(row - source_anchor[0]) + abs(col - source_anchor[1]) == farthest
-    )
+    template_rows = set(row for row, column in raw_template)
+    for row in template_rows:
+        nearest = None
+        nearest_distance = width + 1
+        for cell_row, cell_column in raw_template:
+            if cell_row == row and abs(cell_column - source_anchor[1]) < nearest_distance:
+                nearest = (cell_row, cell_column)
+                nearest_distance = abs(cell_column - source_anchor[1])
+        template.add(nearest)
+    template_columns = set(column for row, column in raw_template)
+    for column in template_columns:
+        nearest = None
+        nearest_distance = height + 1
+        for cell_row, cell_column in raw_template:
+            if cell_column == column and abs(cell_row - source_anchor[0]) < nearest_distance:
+                nearest = (cell_row, cell_column)
+                nearest_distance = abs(cell_row - source_anchor[0])
+        template.add(nearest)
+    farthest = max(abs(row - source_anchor[0]) + abs(column - source_anchor[1])
+                   for row, column in raw_template)
+    for row, column in raw_template:
+        if abs(row - source_anchor[0]) + abs(column - source_anchor[1]) == farthest:
+            template.add((row, column))
+    if source_distance > 0:
+        template = set(raw_template)
 
-    def corner_sign(marker):
-        top, left, (row, col) = marker
-        return (-1 if row == top else 1, -1 if col == left else 1)
+    source_row_sign = -1 if source_anchor[0] == source[0] else 1
+    source_column_sign = -1 if source_anchor[1] == source[1] else 1
+    relative = []
+    for row, column in template:
+        relative.append((row - source_anchor[0], column - source_anchor[1]))
 
-    source_row_sign, source_col_sign = corner_sign(source)
-    relative = [
-        (row - source_anchor[0], col - source_anchor[1])
-        for row, col in template
-    ]
-
-    output = [
-        [0 if value == 2 else value for value in row]
-        for row in grid
-    ]
+    output = []
+    for row in grid:
+        output.append([0 if value == 2 else value for value in row])
     for marker in markers:
         target_anchor = marker[2]
-        target_row_sign, target_col_sign = corner_sign(marker)
-        for drow, dcol in relative:
-            row = target_anchor[0] + drow * target_row_sign * source_row_sign
-            col = target_anchor[1] + dcol * target_col_sign * source_col_sign
-            if 0 <= row < height and 0 <= col < width:
-                output[row][col] = 2
-
+        target_row_sign = -1 if target_anchor[0] == marker[0] else 1
+        target_column_sign = -1 if target_anchor[1] == marker[1] else 1
+        for row_offset, column_offset in relative:
+            row = (target_anchor[0]
+                   + row_offset * target_row_sign * source_row_sign)
+            column = (target_anchor[1]
+                      + column_offset * target_column_sign * source_column_sign)
+            if 0 <= row < height and 0 <= column < width:
+                output[row][column] = 2
     return output

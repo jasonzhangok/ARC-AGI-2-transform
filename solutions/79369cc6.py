@@ -20,22 +20,17 @@ def transform(grid):
         if template is not None:
             break
 
-    def rotate(pattern):
-        return tuple(
-            tuple(pattern[2 - col][row] for col in range(3))
-            for row in range(3)
-        )
-
-    def reflect(pattern):
-        return tuple(tuple(reversed(row)) for row in pattern)
-
     variants = []
     current = template
     for _ in range(4):
-        for candidate in (current, reflect(current)):
+        reflected = tuple(tuple(reversed(row)) for row in current)
+        for candidate in (current, reflected):
             if candidate not in variants:
                 variants.append(candidate)
-        current = rotate(current)
+        current = tuple(
+            tuple(current[2 - col][row] for col in range(3))
+            for row in range(3)
+        )
 
     for pattern in variants:
         anchors = [

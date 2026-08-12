@@ -25,7 +25,18 @@ def transform(grid):
     vertical_separators = [col for col in zero_cols if 0 < col < width - 1]
 
     if len(vertical_separators) > len(horizontal_separators):
-        bands = _bands(width, zero_cols)
+        _length = width
+        _separators = zero_cols
+        separator_set = set(_separators)
+        bands = []
+        start = 0
+        for position in range(_length + 1):
+            if position == _length or position in separator_set:
+                if start < position:
+                    bands.append(range(start, position))
+                start = position + 1
+        _bands_result_1 = bands
+        bands = _bands_result_1
         band_of = {col: index for index, band in enumerate(bands) for col in band}
         marker_band = band_of[marker_left]
         step = marker_bottom - marker_top + 1
@@ -37,7 +48,18 @@ def transform(grid):
                         and 0 < abs(band_of[col] - marker_band) <= radius):
                     output[row][col] = 4
     else:
-        bands = _bands(height, zero_rows)
+        _length = height
+        _separators = zero_rows
+        separator_set = set(_separators)
+        bands = []
+        start = 0
+        for position in range(_length + 1):
+            if position == _length or position in separator_set:
+                if start < position:
+                    bands.append(range(start, position))
+                start = position + 1
+        _bands_result_2 = bands
+        bands = _bands_result_2
         band_of = {row: index for index, band in enumerate(bands) for row in band}
         marker_band = band_of[marker_top]
         step = marker_right - marker_left + 1
@@ -52,15 +74,3 @@ def transform(grid):
                     output[row][col] = 4
 
     return output
-
-
-def _bands(length, separators):
-    separator_set = set(separators)
-    bands = []
-    start = 0
-    for position in range(length + 1):
-        if position == length or position in separator_set:
-            if start < position:
-                bands.append(range(start, position))
-            start = position + 1
-    return bands

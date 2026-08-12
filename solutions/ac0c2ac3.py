@@ -3,4 +3,5 @@ def transform(grid):
     for r in range(h):
         for c in range(w):
             if grid[r][c]!=7: colors[max(abs(r-cr),abs(c-cc))]=grid[r][c]
-    return [[colors[max(abs(r-cr),abs(c-cc))] for c in range(w)] for r in range(h)]
+    output = [[colors[max(abs(r-cr),abs(c-cc))] for c in range(w)] for r in range(h)]
+    return output

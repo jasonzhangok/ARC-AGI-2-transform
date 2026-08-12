@@ -31,4 +31,5 @@ def transform(grid):
                             stack.append((ny, nx))
         for c in range(lc, w):
             out[lr][c] = color if c < lc + count else 0
-    return out
+    output = out
+    return output

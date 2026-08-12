@@ -91,4 +91,5 @@ def transform(grid):
         result[row][col] = 0
     for row, col in additions:
         result[row][col] = 3
-    return result
+    output = result
+    return output

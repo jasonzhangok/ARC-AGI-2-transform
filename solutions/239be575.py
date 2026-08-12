@@ -1,7 +1,8 @@
 def transform(grid):
     height, width = len(grid), len(grid[0])
 
-    def components(color):
+    components_by_color = {}
+    for color in (2, 8):
         remaining = {
             (r, c)
             for r in range(height)
@@ -23,10 +24,11 @@ def transform(grid):
                             component.add(neighbor)
                             stack.append(neighbor)
             found.append(component)
-        return found
+        components_by_color[color] = found
 
-    targets = components(2)
-    for path in components(8):
+    targets = components_by_color[2]
+    output = [[0]]
+    for path in components_by_color[8]:
         touches = 0
         for target in targets:
             if any(
@@ -36,5 +38,6 @@ def transform(grid):
             ):
                 touches += 1
         if touches >= 2:
-            return [[8]]
-    return [[0]]
+            output = [[8]]
+            break
+    return output

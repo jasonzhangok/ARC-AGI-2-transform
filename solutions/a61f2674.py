@@ -8,4 +8,5 @@ def transform(grid):
     out=[[0]*w for _ in range(h)]
     for r in longest[2]: out[r][longest[1]]=1
     for r in shortest[2]: out[r][shortest[1]]=2
-    return out
+    output = out
+    return output

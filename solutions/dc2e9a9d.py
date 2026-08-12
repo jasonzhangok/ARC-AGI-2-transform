@@ -70,4 +70,5 @@ def transform(grid):
                     if 0 <= new_col < width:
                         result[current_row][new_col] = copy_color
 
-    return result
+    output = result
+    return output

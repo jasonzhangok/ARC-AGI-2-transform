@@ -1,10 +1,14 @@
-def _components(grid, color):
+def transform(grid):
     height, width = len(grid), len(grid[0])
+    objects = []
+    _grid = grid
+    _color = 3
+    height, width = len(_grid), len(_grid[0])
     remaining = {
         (row, col)
         for row in range(height)
         for col in range(width)
-        if grid[row][col] == color
+        if _grid[row][col] == _color
     }
     result = []
     while remaining:
@@ -19,13 +23,8 @@ def _components(grid, color):
                     remaining.remove(neighbor)
                     queue.append(neighbor)
         result.append(component)
-    return result
-
-
-def transform(grid):
-    height, width = len(grid), len(grid[0])
-    objects = []
-    for component in _components(grid, 3):
+    _components_result_1 = result
+    for component in _components_result_1:
         top = min(row for row, _ in component)
         left = min(col for _, col in component)
         bottom = max(row for row, _ in component)

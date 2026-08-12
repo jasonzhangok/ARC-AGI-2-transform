@@ -31,20 +31,20 @@ def transform(grid):
     new_left, new_right = left, right
     for row, col in markers:
         if row < top:
+            horizontal_lines.discard(new_top)
             new_top = row + 1
-            horizontal_lines.discard(top)
             horizontal_lines.add(new_top)
-        elif row > bottom:
+        if row > bottom:
+            horizontal_lines.discard(new_bottom)
             new_bottom = row - 1
-            horizontal_lines.discard(bottom)
             horizontal_lines.add(new_bottom)
-        elif col < left:
+        if col < left:
+            vertical_lines.discard(new_left)
             new_left = col + 1
-            vertical_lines.discard(left)
             vertical_lines.add(new_left)
-        elif col > right:
+        if col > right:
+            vertical_lines.discard(new_right)
             new_right = col - 1
-            vertical_lines.discard(right)
             vertical_lines.add(new_right)
 
     output = [[0] * width for _ in range(height)]

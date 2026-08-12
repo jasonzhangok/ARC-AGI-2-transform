@@ -27,4 +27,5 @@ def transform(grid):
                         if grid[r][c] != 1]
             if reliable:
                 template[rr][cc] = reliable[0]
-    return [[template[r % pr][c % pc] for c in range(w)] for r in range(h)]
+    output = [[template[r % pr][c % pc] for c in range(w)] for r in range(h)]
+    return output

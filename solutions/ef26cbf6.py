@@ -20,4 +20,5 @@ def transform(grid):
             for c in range(x + 1, y):
                 if out[r][c] == 1:
                     out[r][c] = color
-    return out
+    output = out
+    return output

@@ -4,4 +4,5 @@ def transform(grid):
     rows=sorted(set(r for r,_,_ in vals))
     for r,c,v in vals:
         out[0 if r==rows[0] else len(grid)-1][0 if c==min(x[1] for x in vals if x[0]==r) else len(grid[0])-1]=v
-    return out
+    output = out
+    return output

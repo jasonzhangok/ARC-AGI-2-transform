@@ -1,23 +1,47 @@
-from collections import Counter
-
 def transform(grid):
-    out=[row[:] for row in grid]; h=len(grid); w=len(grid[0])
-    seen=set()
-    for r in range(h):
-        for c in range(w):
-            if grid[r][c]!=8 or (r,c) in seen: continue
-            stack=[(r,c)]; seen.add((r,c)); cells=[]
-            while stack:
-                x,y=stack.pop(); cells.append((x,y))
-                for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)):
-                    q=(x+dx,y+dy)
-                    if 0<=q[0]<h and 0<=q[1]<w and q not in seen and grid[q[0]][q[1]]==8:
-                        seen.add(q); stack.append(q)
-            rs=[x for x,_ in cells]; cs=[y for _,y in cells]; r0,r1=min(rs),max(rs); c0,c1=min(cs),max(cs)
-            band=min(r1-r0+1,c1-c0+1)//4
-            for x,y in cells:
-                if r0+band<=x<=r1-band and c0+band<=y<=c1-band: color=4
-                elif x < r0+(r1-r0+1)/2: color=6 if y < c0+(c1-c0+1)/2 else 1
-                else: color=2 if y < c0+(c1-c0+1)/2 else 3
-                out[x][y]=color
-    return out
+    height = len(grid)
+    width = len(grid[0])
+    output = [row[:] for row in grid]
+    remaining = set()
+    for row in range(height):
+        for col in range(width):
+            if grid[row][col] == 8:
+                remaining.add((row, col))
+
+    while remaining:
+        start = remaining.pop()
+        component = {start}
+        stack = [start]
+        while stack:
+            row, col = stack.pop()
+            for neighbor in (
+                (row - 1, col),
+                (row + 1, col),
+                (row, col - 1),
+                (row, col + 1),
+            ):
+                if neighbor in remaining:
+                    remaining.remove(neighbor)
+                    component.add(neighbor)
+                    stack.append(neighbor)
+        top = min(row for row, col in component)
+        bottom = max(row for row, col in component)
+        left = min(col for row, col in component)
+        right = max(col for row, col in component)
+        doubled_middle_row = top + bottom
+        doubled_middle_col = left + right
+        for row, col in component:
+            if top + 2 <= row <= bottom - 2 and left + 2 <= col <= right - 2:
+                output[row][col] = 4
+            elif 2 * row <= doubled_middle_row:
+                if 2 * col <= doubled_middle_col:
+                    output[row][col] = 6
+                else:
+                    output[row][col] = 1
+            else:
+                if 2 * col <= doubled_middle_col:
+                    output[row][col] = 2
+                else:
+                    output[row][col] = 3
+
+    return output

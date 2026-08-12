@@ -1,6 +1,3 @@
-from collections import deque
-
-
 def transform(grid):
     height, width = len(grid), len(grid[0])
     remaining = {
@@ -14,9 +11,11 @@ def transform(grid):
     while remaining:
         start = remaining.pop()
         component = {start}
-        queue = deque([start])
-        while queue:
-            row, column = queue.popleft()
+        queue = [start]
+        position = 0
+        while position < len(queue):
+            row, column = queue[position]
+            position += 1
             for neighbor in (
                 (row - 1, column),
                 (row + 1, column),
@@ -29,8 +28,9 @@ def transform(grid):
                     queue.append(neighbor)
         components.append(component)
 
-    def cross_count(component):
-        return sum(
+    scored = []
+    for index, component in enumerate(components):
+        score = sum(
             grid[row][column] == 3
             and all(
                 (neighbor_row, neighbor_column) in component
@@ -44,10 +44,11 @@ def transform(grid):
             )
             for row, column in component
         )
-
-    selected = max(components, key=cross_count)
+        scored.append((score, -index, component))
+    selected = max(scored)[2]
     top = min(row for row, _ in selected)
     bottom = max(row for row, _ in selected)
     left = min(column for _, column in selected)
     right = max(column for _, column in selected)
-    return [grid[row][left:right + 1] for row in range(top, bottom + 1)]
+    output = [grid[row][left:right + 1] for row in range(top, bottom + 1)]
+    return output

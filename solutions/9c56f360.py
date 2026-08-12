@@ -10,4 +10,5 @@ def transform(grid):
         start = max(eights) + 1 if eights else 0
         for c in range(start, min(start + count, w)):
             out[r][c] = 3
-    return out
+    output = out
+    return output

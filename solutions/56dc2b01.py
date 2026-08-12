@@ -18,4 +18,5 @@ def transform(grid):
         border=(c0+dc-1) if c1<sep_col else (c1+dc+1)
         if 0<=border<w:
             for r in range(h):out[r][border]=8
-    return out
+    output = out
+    return output

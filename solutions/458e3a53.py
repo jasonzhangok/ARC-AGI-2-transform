@@ -6,13 +6,12 @@ def transform(grid):
         c for c in range(w) if all(grid[r][c] == separator for r in range(h))
     ]
 
-    def intervals(n, separators):
-        bounds = [-1] + separators + [n]
-        return [(bounds[i] + 1, bounds[i + 1]) for i in range(len(bounds) - 1)
-                if bounds[i] + 1 < bounds[i + 1]]
-
-    rows = intervals(h, separator_rows)
-    cols = intervals(w, separator_cols)
+    row_bounds = [-1] + separator_rows + [h]
+    rows = [(row_bounds[i] + 1, row_bounds[i + 1]) for i in range(len(row_bounds) - 1)
+            if row_bounds[i] + 1 < row_bounds[i + 1]]
+    col_bounds = [-1] + separator_cols + [w]
+    cols = [(col_bounds[i] + 1, col_bounds[i + 1]) for i in range(len(col_bounds) - 1)
+            if col_bounds[i] + 1 < col_bounds[i + 1]]
     uniform = {}
     for i, (r0, r1) in enumerate(rows):
         for j, (c0, c1) in enumerate(cols):
@@ -23,4 +22,5 @@ def transform(grid):
     c_ids = [j for _, j in uniform]
     r0, r1 = min(r_ids), max(r_ids)
     c0, c1 = min(c_ids), max(c_ids)
-    return [[uniform[i, j] for j in range(c0, c1 + 1)] for i in range(r0, r1 + 1)]
+    output = [[uniform[i, j] for j in range(c0, c1 + 1)] for i in range(r0, r1 + 1)]
+    return output

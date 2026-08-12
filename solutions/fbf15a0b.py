@@ -15,4 +15,5 @@ def transform(grid):
         use_left = all(col < half for _, col in markers)
         selected = [row[:half] if use_left else row[half:] for row in grid]
 
-    return [[8 if value == 5 else value for value in row] for row in selected]
+    output = [[8 if value == 5 else value for value in row] for row in selected]
+    return output

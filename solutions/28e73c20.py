@@ -26,4 +26,5 @@ def transform(grid):
             break
     if height % 2 == 0 and width % 2 == 0:
         result[height // 2][width // 2 - 1] = 3
-    return result
+    output = result
+    return output

@@ -5,4 +5,5 @@ def transform(grid):
         for y in range(h):out[y][x]=color
         if x+1<w:out[0 if up else h-1][x+1]=5
         up=not up;x+=2
-    return out
+    output = out
+    return output

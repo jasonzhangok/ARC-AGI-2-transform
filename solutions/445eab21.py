@@ -1,7 +1,7 @@
-from collections import Counter
-
-
 def transform(grid):
-    counts = Counter(value for row in grid for value in row if value != 0)
+    counts = {}
+    for cell_value in (value for row in grid for value in row if value != 0):
+        counts[cell_value] = counts.get(cell_value, 0) + 1
     color = max(counts, key=counts.get)
-    return [[color, color], [color, color]]
+    output = [[color, color], [color, color]]
+    return output

@@ -10,20 +10,16 @@ def transform(grid):
                 candidates.append((top, left, cells))
 
     solution = None
-
-    def cover(remaining, selected):
-        nonlocal solution
-        if solution is not None:
-            return
+    stack = [(occupied, [])]
+    while stack and solution is None:
+        remaining, selected = stack.pop()
         if not remaining:
-            solution = selected[:]
-            return
+            solution = selected
+            break
         first = min(remaining)
-        for candidate in candidates:
-            if first in candidate[2] and candidate[2] <= remaining:
-                cover(remaining - candidate[2], selected + [candidate])
-
-    cover(occupied, [])
+        options = [candidate for candidate in candidates if first in candidate[2] and candidate[2] <= remaining]
+        for candidate in reversed(options):
+            stack.append((remaining - candidate[2], selected + [candidate]))
     out = [[5] * 9 for _ in range(9)]
     for top, left, _ in solution:
         tile = [row[left:left + 3] for row in grid[top:top + 3]]
@@ -32,11 +28,12 @@ def transform(grid):
         if accents:
             mean_r = sum(r for r, _ in accents) / len(accents)
             mean_c = sum(c for _, c in accents) / len(accents)
-            target_r = min(range(3), key=lambda value: abs(value - mean_r))
-            target_c = min(range(3), key=lambda value: abs(value - mean_c))
+            target_r = min((abs(value - mean_r), value) for value in range(3))[1]
+            target_c = min((abs(value - mean_c), value) for value in range(3))[1]
         else:
             target_r = target_c = 1
         for r in range(3):
             for c in range(3):
                 out[target_r * 3 + r][target_c * 3 + c] = tile[r][c]
-    return out
+    output = out
+    return output

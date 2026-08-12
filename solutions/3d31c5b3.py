@@ -7,4 +7,5 @@ def transform(grid):
             for c in range(width):
                 if result[r][c] == 0 and grid[panel * panel_height + r][c] != 0:
                     result[r][c] = grid[panel * panel_height + r][c]
-    return result
+    output = result
+    return output

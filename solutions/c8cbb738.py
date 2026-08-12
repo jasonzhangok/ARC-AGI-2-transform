@@ -1,10 +1,10 @@
-from collections import Counter
 
 
 def transform(grid):
-    background = Counter(
-        value for row in grid for value in row
-    ).most_common(1)[0][0]
+    background = {}
+    for cell_value in (value for row in grid for value in row):
+        background[cell_value] = background.get(cell_value, 0) + 1
+    background = max(background, key=background.get)
     colors = {value for row in grid for value in row if value != background}
     objects = []
     output_size = 0

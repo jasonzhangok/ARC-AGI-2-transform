@@ -1,28 +1,57 @@
 def transform(grid):
-    h, w = len(grid), len(grid[0])
+    height = len(grid)
+    width = len(grid[0])
     seen = set()
     pieces = []
-    for r in range(h):
-        for c in range(w):
-            if grid[r][c] == 0 or (r, c) in seen:
+    for start_row in range(height):
+        for start_col in range(width):
+            color = grid[start_row][start_col]
+            if color == 0 or (start_row, start_col) in seen:
                 continue
-            stack = [(r, c)]
-            seen.add((r, c))
-            cells = []
+            component = []
+            stack = [(start_row, start_col)]
+            seen.add((start_row, start_col))
             while stack:
-                x, y = stack.pop()
-                cells.append((x, y, grid[x][y]))
-                for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                    q = (x + dx, y + dy)
-                    if 0 <= q[0] < h and 0 <= q[1] < w and q not in seen and grid[q[0]][q[1]] != 0:
-                        seen.add(q)
-                        stack.append(q)
-            pieces.append(cells)
-    out = [[0] * w for _ in range(h)]
-    for cells in sorted(pieces, key=lambda p: max(c for _, c, _ in p), reverse=True):
+                row, col = stack.pop()
+                component.append((row, col, color))
+                for next_row, next_col in (
+                    (row - 1, col),
+                    (row + 1, col),
+                    (row, col - 1),
+                    (row, col + 1),
+                ):
+                    if 0 <= next_row < height and 0 <= next_col < width:
+                        if (next_row, next_col) not in seen:
+                            if grid[next_row][next_col] == color:
+                                seen.add((next_row, next_col))
+                                stack.append((next_row, next_col))
+            pieces.append(component)
+
+    ordered_pieces = []
+    remaining_indices = set(range(len(pieces)))
+    while remaining_indices:
+        selected_index = None
+        selected_right = -1
+        for index in remaining_indices:
+            right = max(col for row, col, color in pieces[index])
+            if right > selected_right:
+                selected_index = index
+                selected_right = right
+        ordered_pieces.append(pieces[selected_index])
+        remaining_indices.remove(selected_index)
+
+    output = [[0 for col in range(width)] for row in range(height)]
+    for component in ordered_pieces:
         shift = 0
-        while all(c + shift + 1 < w and out[r][c + shift + 1] == 0 for r, c, _ in cells):
-            shift += 1
-        for r, c, color in cells:
-            out[r][c + shift] = color
-    return out
+        can_shift = True
+        while can_shift:
+            for row, col, color in component:
+                target_col = col + shift + 1
+                if target_col >= width or output[row][target_col] != 0:
+                    can_shift = False
+            if can_shift:
+                shift += 1
+        for row, col, color in component:
+            output[row][col + shift] = color
+
+    return output

@@ -1,25 +1,29 @@
-from collections import Counter, deque
 
 
 def transform(grid):
     height, width = len(grid), len(grid[0])
-    background = Counter(value for row in grid for value in row).most_common(1)[0][0]
+    background = {}
+    for cell_value in (value for row in grid for value in row):
+        background[cell_value] = background.get(cell_value, 0) + 1
+    background = max(background, key=background.get)
     remaining = {(r, c) for r in range(height) for c in range(width) if grid[r][c] != background}
     components = []
     while remaining:
         start = remaining.pop()
         color = grid[start[0]][start[1]]
-        queue = deque([start])
+        queue = list([start])
         component = {start}
         while queue:
-            row, col = queue.popleft()
+            row, col = queue.pop(0)
             for point in ((row - 1, col), (row + 1, col), (row, col - 1), (row, col + 1)):
                 if point in remaining and grid[point[0]][point[1]] == color:
                     remaining.remove(point)
                     component.add(point)
                     queue.append(point)
         components.append((color, component))
-    frequencies = Counter(color for color, _ in components)
+    frequencies = {}
+    for cell_value in (color for color, _ in components):
+        frequencies[cell_value] = frequencies.get(cell_value, 0) + 1
     output = [row[:] for row in grid]
     for color, component in components:
         if frequencies[color] < 2:

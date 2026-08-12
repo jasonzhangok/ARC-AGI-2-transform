@@ -19,4 +19,5 @@ def transform(grid):
             for r, c in cells:
                 d = min(r-r0, r1-r, c-c0, c1-c)
                 out[r][c] = palette[d % 4]
-    return out
+    output = out
+    return output

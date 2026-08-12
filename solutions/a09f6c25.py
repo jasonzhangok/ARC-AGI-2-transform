@@ -52,4 +52,5 @@ def transform(grid):
                 new_color = foreground
             for cr, cc in component:
                 out[cr][cc] = new_color
-    return out
+    output = out
+    return output

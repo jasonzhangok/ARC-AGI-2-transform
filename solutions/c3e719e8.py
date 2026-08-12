@@ -1,9 +1,11 @@
-from collections import Counter
 
 
 def transform(grid):
     n = len(grid)
-    dominant = Counter(value for row in grid for value in row).most_common(1)[0][0]
+    dominant = {}
+    for cell_value in (value for row in grid for value in row):
+        dominant[cell_value] = dominant.get(cell_value, 0) + 1
+    dominant = max(dominant, key=dominant.get)
     output = [[0] * (n * n) for _ in range(n * n)]
     for block_r in range(n):
         for block_c in range(n):

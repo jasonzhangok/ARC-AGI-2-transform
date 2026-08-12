@@ -14,6 +14,8 @@ def transform(grid):
 
     row_bounds = [-1] + separator_rows + [height]
     col_bounds = [-1] + separator_cols + [width]
+    output = []
+    found = False
     for row_index in range(len(row_bounds) - 1):
         for col_index in range(len(col_bounds) - 1):
             block = [
@@ -26,6 +28,9 @@ def transform(grid):
                     if color != 0:
                         colors.add(color)
             if len(colors) == 1:
-                return [row[:] for row in block]
-
-    return []
+                output = [row[:] for row in block]
+                found = True
+                break
+        if found:
+            break
+    return output

@@ -10,7 +10,8 @@ def transform(grid):
         if not columns or column != columns[-1]:
             columns.append(column)
 
-    return [
+    output = [
         [columns[col][row] for col in range(len(columns))]
         for row in range(len(rows))
     ]
+    return output

@@ -4,4 +4,5 @@ def transform(grid):
     for x in range(r+1):
         for y in range(c%2,w,2):out[x][y]=4
     if r+1<h:out[r+1][c]=color
-    return out
+    output = out
+    return output

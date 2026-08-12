@@ -1,19 +1,21 @@
-from collections import Counter, deque
 
 
 def transform(grid):
     height, width = len(grid), len(grid[0])
-    background = Counter(value for row in grid for value in row).most_common(1)[0][0]
+    background = {}
+    for cell_value in (value for row in grid for value in row):
+        background[cell_value] = background.get(cell_value, 0) + 1
+    background = max(background, key=background.get)
     path_color = next(value for row in grid for value in row if value != background)
     exterior = set()
-    queue = deque()
+    queue = []
     for row in range(height):
         for col in range(width):
             if (row in (0, height - 1) or col in (0, width - 1)) and grid[row][col] == background:
                 exterior.add((row, col))
                 queue.append((row, col))
     while queue:
-        row, col = queue.popleft()
+        row, col = queue.pop(0)
         for dr, dc in ((-1, 0), (1, 0), (0, -1), (0, 1)):
             y, x = row + dr, col + dc
             if (0 <= y < height and 0 <= x < width and

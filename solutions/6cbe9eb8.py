@@ -1,10 +1,6 @@
 def transform(grid):
     height = len(grid)
     width = len(grid[0])
-
-    # Infer fundamental periods from the opposite outer edges, where at
-    # least one copy of each background phase remains unobscured.  Different
-    # edge phases can have smaller subperiods, so combine them by LCM.
     best_row_period = 1
     best_col_period = 1
     row_periods = []
@@ -34,9 +30,8 @@ def transform(grid):
         a = best_row_period
         b = row_period
         while b:
-            a, b = b, a % b
+            a, b = (b, a % b)
         best_row_period = best_row_period // a * row_period
-
     col_periods = []
     edge_rows = (0,) if height == 1 else (0, height - 1)
     for edge_row in edge_rows:
@@ -64,9 +59,8 @@ def transform(grid):
         a = best_col_period
         b = col_period
         while b:
-            a, b = b, a % b
+            a, b = (b, a % b)
         best_col_period = best_col_period // a * col_period
-
     background = []
     for row_phase in range(best_row_period):
         tile_row = []
@@ -84,7 +78,6 @@ def transform(grid):
                     majority_count = count
             tile_row.append(majority_value)
         background.append(tile_row)
-
     foreground = {}
     for row in range(height):
         for col in range(width):
@@ -93,7 +86,6 @@ def transform(grid):
                 if value not in foreground:
                     foreground[value] = []
                 foreground[value].append((row, col))
-
     rectangles = []
     for color, cells in foreground.items():
         top = height
@@ -116,44 +108,39 @@ def transform(grid):
             if top < row < bottom and left < col < right:
                 is_frame = False
                 break
-        rectangles.append((-rect_height * rect_width, -rect_height, -rect_width,
-                           color, rect_height, rect_width, is_frame))
-
+        rectangles.append((-rect_height * rect_width, -rect_height, -rect_width, color, rect_height, rect_width, is_frame))
     rectangles.sort()
     if not rectangles:
-        return []
-
-    output_height = rectangles[0][4]
-    output_width = rectangles[0][5]
-    output = [[0 for col in range(output_width)] for row in range(output_height)]
-    placed_top = 0
-    placed_left = 0
-    placed_height = output_height
-    placed_width = output_width
-    placed_is_frame = rectangles[0][6]
-
-    for index in range(len(rectangles)):
-        color = rectangles[index][3]
-        rect_height = rectangles[index][4]
-        rect_width = rectangles[index][5]
-        is_frame = rectangles[index][6]
-        if index == 0:
-            top = 0
-            left = 0
-        else:
-            inset = 1 if placed_is_frame else 0
-            top = placed_top + placed_height - rect_height - inset
-            left = placed_left + inset
-
-        for row in range(rect_height):
-            for col in range(rect_width):
-                if not is_frame or row == 0 or row == rect_height - 1 or col == 0 or col == rect_width - 1:
-                    output[top + row][left + col] = color
-
-        placed_top = top
-        placed_left = left
-        placed_height = rect_height
-        placed_width = rect_width
-        placed_is_frame = is_frame
-
+        output = []
+    else:
+        output_height = rectangles[0][4]
+        output_width = rectangles[0][5]
+        output = [[0 for col in range(output_width)] for row in range(output_height)]
+        placed_top = 0
+        placed_left = 0
+        placed_height = output_height
+        placed_width = output_width
+        placed_is_frame = rectangles[0][6]
+        for index in range(len(rectangles)):
+            color = rectangles[index][3]
+            rect_height = rectangles[index][4]
+            rect_width = rectangles[index][5]
+            is_frame = rectangles[index][6]
+            if index == 0:
+                top = 0
+                left = 0
+            else:
+                inset = 1 if placed_is_frame else 0
+                top = placed_top + placed_height - rect_height - inset
+                left = placed_left + inset
+            for row in range(rect_height):
+                for col in range(rect_width):
+                    if not is_frame or row == 0 or row == rect_height - 1 or (col == 0) or (col == rect_width - 1):
+                        output[top + row][left + col] = color
+            placed_top = top
+            placed_left = left
+            placed_height = rect_height
+            placed_width = rect_width
+            placed_is_frame = is_frame
+        output = output
     return output

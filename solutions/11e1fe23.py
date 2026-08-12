@@ -1,17 +1,35 @@
 def transform(grid):
+    height = len(grid)
+    width = len(grid[0])
     output = [row[:] for row in grid]
-    points = [
-        (r, c, value)
-        for r, row in enumerate(grid)
-        for c, value in enumerate(row)
-        if value != 0
-    ]
-    top, bottom = min(r for r, _, _ in points), max(r for r, _, _ in points)
-    left, right = min(c for _, c, _ in points), max(c for _, c, _ in points)
-    center_r, center_c = (top + bottom) // 2, (left + right) // 2
-    output[center_r][center_c] = 5
-    for r, c, color in points:
-        rr = r + (2 if r < center_r else -2 if r > center_r else 0)
-        cc = c + (2 if c < center_c else -2 if c > center_c else 0)
-        output[rr][cc] = color
+
+    corners = []
+    for row in range(height):
+        for col in range(width):
+            if grid[row][col] != 0:
+                corners.append((row, col, grid[row][col]))
+
+    top = min(row for row, col, color in corners)
+    bottom = max(row for row, col, color in corners)
+    left = min(col for row, col, color in corners)
+    right = max(col for row, col, color in corners)
+    center_row = (top + bottom) // 2
+    center_col = (left + right) // 2
+    output[center_row][center_col] = 5
+
+    for row, col, color in corners:
+        if row < center_row:
+            target_row = center_row - 1
+        elif row > center_row:
+            target_row = center_row + 1
+        else:
+            target_row = center_row
+        if col < center_col:
+            target_col = center_col - 1
+        elif col > center_col:
+            target_col = center_col + 1
+        else:
+            target_col = center_col
+        output[target_row][target_col] = color
+
     return output

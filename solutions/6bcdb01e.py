@@ -44,4 +44,5 @@ def transform(grid):
             col = next_col
             if result[row][col] == 7:
                 result[row][col] = 3
-    return result
+    output = result
+    return output

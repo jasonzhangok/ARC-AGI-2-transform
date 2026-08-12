@@ -1,4 +1,3 @@
-from collections import deque
 
 
 def transform(grid):
@@ -10,11 +9,11 @@ def transform(grid):
         for c in range(w):
             if grid[r][c] != 0 or (r, c) in seen:
                 continue
-            queue = deque([(r, c)])
+            queue = list([(r, c)])
             seen.add((r, c))
             component = []
             while queue:
-                x, y = queue.popleft()
+                x, y = queue.pop(0)
                 component.append((x, y))
                 for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
                     if 0 <= nx < h and 0 <= ny < w and grid[nx][ny] == 0 and (nx, ny) not in seen:

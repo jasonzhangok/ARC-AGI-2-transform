@@ -4,4 +4,5 @@ def transform(grid):
         color=grid[r][c];vr=range(0,r+1) if r<h/2 else range(r,h);hc=range(0,c+1) if c<w/2 else range(c,w)
         for x in vr:out[x][c]=color
         for y in hc:out[r][y]=color
-    return out
+    output = out
+    return output

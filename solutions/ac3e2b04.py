@@ -38,4 +38,5 @@ def transform(grid):
                     nr, nc = cross_r + dr, cross_c + dc
                     if 0 <= nr < h and 0 <= nc < w:
                         out[nr][nc] = 2 if (dr, dc) == (0, 0) else 1
-    return out
+    output = out
+    return output

@@ -14,4 +14,5 @@ def transform(grid):
                 result[row][col] = source_color
             elif abs(col - source_col) < row and (col - row - source_col) % 4 == 0:
                 result[row][col] = 1
-    return result
+    output = result
+    return output

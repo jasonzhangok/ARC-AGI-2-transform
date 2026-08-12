@@ -6,4 +6,5 @@ def transform(grid):
     for r,c in pts8:
         nc=nc0+(c1-c)
         if 0<=nc<len(grid[0]):out[r][nc]=8
-    return out
+    output = out
+    return output

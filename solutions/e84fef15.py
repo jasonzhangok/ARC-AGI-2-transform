@@ -1,4 +1,3 @@
-from collections import Counter
 
 
 def transform(grid):
@@ -45,7 +44,9 @@ def transform(grid):
                 for rows in row_groups
                 for cols in col_groups
             ]
-            counts = Counter(values)
+            counts = {}
+            for cell_value in (values):
+                counts[cell_value] = counts.get(cell_value, 0) + 1
             output_row.append(values[0] if len(counts) == 1 else 1)
         output.append(output_row)
     return output

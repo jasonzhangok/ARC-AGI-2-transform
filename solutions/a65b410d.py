@@ -8,4 +8,5 @@ def transform(grid):
     for r in range(r0+1,h):
         length=n-(r-r0)
         for c in range(c0,min(w,c0+max(0,length))): out[r][c]=1
-    return out
+    output = out
+    return output

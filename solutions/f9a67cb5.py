@@ -1,6 +1,3 @@
-"""Trace border-originating rays through walls with gaps."""
-
-
 def transform(grid):
     """Extend border-originating rays, detouring around cyan walls."""
     height = len(grid)
@@ -66,4 +63,5 @@ def transform(grid):
                     break
                 follower = (follow_row, follow_col, d_row, d_col, side_row, side_col)
 
-    return result
+    output = result
+    return output

@@ -13,4 +13,5 @@ def transform(grid):
                                 and all(grid[r][left] == color and grid[r][right] == color for r in range(top, bottom + 1))):
                             rectangles.append(((bottom - top - 1) * (right - left - 1), top, bottom, left, right))
     _, top, bottom, left, right = max(rectangles)
-    return [row[left + 1:right] for row in grid[top + 1:bottom]]
+    output = [row[left + 1:right] for row in grid[top + 1:bottom]]
+    return output

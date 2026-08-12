@@ -10,4 +10,5 @@ def transform(grid):
                     q=(x+a,y+b)
                     if 0<=q[0]<h and 0<=q[1]<w and q not in seen and grid[q[0]][q[1]]==col:seen.add(q);st.append(q)
             r0,r1=min(x for x,y in cells),max(x for x,y in cells);c0,c1=min(y for x,y in cells),max(y for x,y in cells);crop=[[grid[x][y] for y in range(c0,c1+1)] for x in range(r0,r1+1)]
-            if len(cells)>1 and crop==[row[::-1] for row in crop]:return crop
+            if len(cells)>1 and crop==[row[::-1] for row in crop]:output = crop
+    return output

@@ -1,10 +1,11 @@
-from collections import Counter
 
 
 def transform(grid):
     height, width = len(grid), len(grid[0])
-    counts = Counter(value for row in grid for value in row)
-    background = counts.most_common(1)[0][0]
+    counts = {}
+    for cell_value in (value for row in grid for value in row):
+        counts[cell_value] = counts.get(cell_value, 0) + 1
+    background = max(counts, key=counts.get)
     marker = min((value for value in counts if value != background), key=counts.get)
     points = [
         (row, col)

@@ -1,13 +1,19 @@
-from collections import Counter
-
-
 def transform(grid):
     h, w = len(grid), len(grid[0])
-    lattice = Counter(value for row in grid for value in row if value != 0).most_common(1)[0][0]
+    counts = {}
+    for row in grid:
+        for value in row:
+            if value != 0:
+                counts[value] = counts.get(value, 0) + 1
+    lattice = None
+    for value in counts:
+        if lattice is None or counts[value] > counts[lattice]:
+            lattice = value
     horizontal = {r for r in range(h) if all(value == lattice for value in grid[r])}
     vertical = {c for c in range(w) if all(grid[r][c] == lattice for r in range(h))}
 
-    def intervals(size, lines):
+    interval_sets = []
+    for size, lines in ((h, horizontal), (w, vertical)):
         result = []
         start = 0
         for line in sorted(lines):
@@ -16,10 +22,8 @@ def transform(grid):
             start = line + 1
         if start < size:
             result.append((start, size))
-        return result
-
-    row_cells = intervals(h, horizontal)
-    col_cells = intervals(w, vertical)
+        interval_sets.append(result)
+    row_cells, col_cells = interval_sets
     marks = [(r, c, grid[r][c]) for r in range(h) for c in range(w) if grid[r][c] not in (0, lattice)]
     sr = next(i for i, (a, b) in enumerate(row_cells) if any(a <= r < b for r, _, _ in marks))
     sc = next(i for i, (a, b) in enumerate(col_cells) if any(a <= c < b for _, c, _ in marks))

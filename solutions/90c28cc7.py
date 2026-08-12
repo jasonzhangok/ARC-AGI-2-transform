@@ -18,5 +18,6 @@ def transform(grid):
         if runs and (not signatures or runs != signatures[-1]):
             signatures.append(runs)
     unit = min(widths)
-    return [[color for color, width in runs for _ in range(max(1, width // unit))]
+    output = [[color for color, width in runs for _ in range(max(1, width // unit))]
             for runs in signatures]
+    return output

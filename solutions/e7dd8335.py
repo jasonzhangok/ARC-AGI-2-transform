@@ -7,4 +7,5 @@ def transform(grid):
     for r, c in cells:
         if r >= split:
             out[r][c] = 2
-    return out
+    output = out
+    return output

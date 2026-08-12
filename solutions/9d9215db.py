@@ -34,4 +34,5 @@ def transform(grid):
         for r in range(top + 2, bottom, 2):
             out[r][left] = edge_color
             out[r][right] = edge_color
-    return out
+    output = out
+    return output

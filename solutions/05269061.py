@@ -4,7 +4,8 @@ def transform(grid):
         for c, value in enumerate(row):
             if value != 0:
                 colors[(r + c) % 3] = value
-    return [
+    output = [
         [colors[(r + c) % 3] for c in range(len(grid[0]))]
         for r in range(len(grid))
     ]
+    return output

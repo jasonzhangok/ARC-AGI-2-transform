@@ -5,4 +5,5 @@ def transform(grid):
     left = min(c for _, c in cells)
     right = max(c for _, c in cells)
     crop = [row[left:right + 1] for row in grid[top:bottom + 1]]
-    return [row + row for row in crop]
+    output = [row + row for row in crop]
+    return output

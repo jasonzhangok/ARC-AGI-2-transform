@@ -8,4 +8,5 @@ def transform(grid):
     for c in range(width):
         if result[height - 1][c] == 0:
             result[height - 1][c] = 4
-    return result
+    output = result
+    return output

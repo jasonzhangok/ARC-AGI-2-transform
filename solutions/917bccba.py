@@ -1,10 +1,11 @@
-from collections import Counter
 
 
 def transform(grid):
     h, w = len(grid), len(grid[0])
     colors = [value for row in grid for value in row if value != 0]
-    counts = Counter(colors)
+    counts = {}
+    for cell_value in (colors):
+        counts[cell_value] = counts.get(cell_value, 0) + 1
     best = None
     for base in counts:
         cells = [(r, c) for r in range(h) for c in range(w) if grid[r][c] == base]

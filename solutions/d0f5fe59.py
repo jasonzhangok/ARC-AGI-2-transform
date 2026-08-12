@@ -16,4 +16,5 @@ def transform(grid):
                     if 0 <= nx < h and 0 <= ny < w and grid[nx][ny] == 8 and (nx, ny) not in seen:
                         seen.add((nx, ny))
                         stack.append((nx, ny))
-    return [[8 if r == c else 0 for c in range(count)] for r in range(count)]
+    output = [[8 if r == c else 0 for c in range(count)] for r in range(count)]
+    return output

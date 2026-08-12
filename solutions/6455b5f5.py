@@ -18,4 +18,5 @@ def transform(grid):
         color = 1 if len(cells) == high else 8 if len(cells) == low else 0
         if color:
             for r, c in cells: out[r][c] = color
-    return out
+    output = out
+    return output

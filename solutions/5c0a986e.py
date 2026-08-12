@@ -8,4 +8,5 @@ def transform(grid):
     r,c=max(twos)
     r+=1;c+=1
     while r<h and c<w:out[r][c]=2;r+=1;c+=1
-    return out
+    output = out
+    return output

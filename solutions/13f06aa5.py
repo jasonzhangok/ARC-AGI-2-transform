@@ -1,8 +1,18 @@
-from collections import Counter
 
 
-def _components(grid, background):
+def transform(grid):
     height, width = len(grid), len(grid[0])
+    output = [row[:] for row in grid]
+    counts = {}
+    for cell_value in (value for row in grid for value in row):
+        counts[cell_value] = counts.get(cell_value, 0) + 1
+    background = max(counts, key=counts.get)
+    singleton_colors = {color for color, count in counts.items() if count == 1}
+    boundaries = []
+
+    _grid = grid
+    _background = background
+    height, width = len(_grid), len(_grid[0])
     directions = [
         (dr, dc)
         for dr in (-1, 0, 1)
@@ -13,7 +23,7 @@ def _components(grid, background):
     result = []
     for r in range(height):
         for c in range(width):
-            if grid[r][c] == background or (r, c) in seen:
+            if _grid[r][c] == _background or (r, c) in seen:
                 continue
             stack = [(r, c)]
             seen.add((r, c))
@@ -27,23 +37,13 @@ def _components(grid, background):
                         0 <= yy < height
                         and 0 <= xx < width
                         and (yy, xx) not in seen
-                        and grid[yy][xx] != background
+                        and _grid[yy][xx] != _background
                     ):
                         seen.add((yy, xx))
                         stack.append((yy, xx))
             result.append(points)
-    return result
-
-
-def transform(grid):
-    height, width = len(grid), len(grid[0])
-    output = [row[:] for row in grid]
-    counts = Counter(value for row in grid for value in row)
-    background = max(counts, key=counts.get)
-    singleton_colors = {color for color, count in counts.items() if count == 1}
-    boundaries = []
-
-    for component in _components(grid, background):
+    _components_result_1 = result
+    for component in _components_result_1:
         signal = next(
             (point for point in component if grid[point[0]][point[1]] in singleton_colors),
             None,

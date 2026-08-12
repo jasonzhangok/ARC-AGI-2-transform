@@ -14,4 +14,5 @@ def transform(grid):
             for r in range(r0): out[r][c] = 2
         if not any(grid[r][c] not in (0, 2) for r in range(r1 + 1, h)):
             for r in range(r1 + 1, h): out[r][c] = 2
-    return out
+    output = out
+    return output

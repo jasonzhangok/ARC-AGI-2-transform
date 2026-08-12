@@ -7,4 +7,5 @@ def transform(grid):
         out[r + dr][c + dc] = 3
     for y, x in points:
         out[y][x] = 1
-    return out
+    output = out
+    return output

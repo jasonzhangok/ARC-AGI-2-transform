@@ -5,4 +5,5 @@ def transform(grid):
     for c, color in enumerate(range(1, 5)):
         for r in range(h - counts[color], h):
             out[r][c] = color
-    return out
+    output = out
+    return output

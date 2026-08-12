@@ -1,54 +1,53 @@
-from collections import Counter
-
-
-def _split(grid):
+def transform(grid):
     height, width = len(grid), len(grid[0])
     choices = []
     if width % 2 == 0:
         choices.append(
             (
-                [row[:width // 2] for row in grid],
-                [row[width // 2:] for row in grid],
+                [row[: width // 2] for row in grid],
+                [row[width // 2 :] for row in grid],
             )
         )
     if height % 2 == 0:
-        choices.append((grid[:height // 2], grid[height // 2:]))
-
-    def uniformity(pair):
-        return sum(
-            max(Counter(value for row in half for value in row).values())
-            for half in pair
-        )
-
-    return max(choices, key=uniformity)
-
-
-def _background_and_foreground_count(grid):
-    counts = Counter(value for row in grid for value in row)
-    background = counts.most_common(1)[0][0]
-    foreground_count = sum(value != background for row in grid for value in row)
-    return background, foreground_count
-
-
-def transform(grid):
-    first, second = _split(grid)
-    first_info = _background_and_foreground_count(first)
-    second_info = _background_and_foreground_count(second)
-    if first_info[1] > second_info[1]:
+        choices.append((grid[: height // 2], grid[height // 2 :]))
+    best_pair = None
+    best_score = None
+    for pair in choices:
+        score = 0
+        for half in pair:
+            counts = {}
+            for value in (value for row in half for value in row):
+                counts[value] = counts.get(value, 0) + 1
+            score += max(counts.values())
+        if best_pair is None or score > best_score:
+            best_pair = pair
+            best_score = score
+    first, second = best_pair
+    counts = {}
+    for value in (value for row in first for value in row):
+        counts[value] = counts.get(value, 0) + 1
+    first_bg = max(counts, key=counts.get)
+    first_fg = sum(value != first_bg for row in first for value in row)
+    counts = {}
+    for value in (value for row in second for value in row):
+        counts[value] = counts.get(value, 0) + 1
+    second_bg = max(counts, key=counts.get)
+    second_fg = sum(value != second_bg for row in second for value in row)
+    if first_fg > second_fg:
         templates, targets = first, second
+        template_background = first_bg
+        target_background = second_bg
     else:
         templates, targets = second, first
-
-    template_background = _background_and_foreground_count(templates)[0]
-    target_background = _background_and_foreground_count(targets)[0]
+        template_background = second_bg
+        target_background = first_bg
     height, width = len(targets), len(targets[0])
-    body_color = Counter(
-        value
-        for row in templates
-        for value in row
-        if value != template_background
-    ).most_common(1)[0][0]
-
+    body_counts = {}
+    for value in (
+        value for row in templates for value in row if value != template_background
+    ):
+        body_counts[value] = body_counts.get(value, 0) + 1
+    body_color = max(body_counts, key=body_counts.get)
     seen = set()
     components = []
     for row in range(height):
@@ -74,7 +73,6 @@ def transform(grid):
                         seen.add(next_cell)
                         stack.append(next_cell)
             components.append(component)
-
     output = [[target_background] * width for _ in range(height)]
     for component in components:
         anchors = [

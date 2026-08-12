@@ -10,7 +10,8 @@ def transform(grid):
         if not compressed_columns or column != compressed_columns[-1]:
             compressed_columns.append(column)
 
-    return [
+    output = [
         [compressed_columns[col][row] for col in range(len(compressed_columns))]
         for row in range(len(compressed_rows))
     ]
+    return output

@@ -4,4 +4,5 @@ def transform(grid):
     out = [[0] * 3 for _ in range(3)]
     for r, c in order[:n]:
         out[r][c] = 2
-    return out
+    output = out
+    return output

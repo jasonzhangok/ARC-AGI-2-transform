@@ -25,6 +25,7 @@ def transform(grid):
                             queue.append(neighbor)
             components.append((color, component))
 
+    output = []
     for color, component in components:
         top = min(row for row, col in component)
         bottom = max(row for row, col in component)
@@ -41,6 +42,5 @@ def transform(grid):
             output = [[0 for col in range(component_width)] for row in range(bottom - top + 1)]
             for row, col in component:
                 output[row - top][col - left] = color
-            return output
-
-    return []
+            break
+    return output

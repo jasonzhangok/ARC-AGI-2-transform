@@ -32,4 +32,5 @@ def transform(grid):
                 nc = nr + target_offset
                 if 0 <= nc < w:
                     out[nr][nc] = color
-    return out
+    output = out
+    return output

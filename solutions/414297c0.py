@@ -1,11 +1,11 @@
-from collections import Counter
 
 
 def transform(grid):
     height, width = len(grid), len(grid[0])
-    canvas_color = Counter(
-        value for row in grid for value in row if value != 0
-    ).most_common(1)[0][0]
+    canvas_color = {}
+    for cell_value in (value for row in grid for value in row if value != 0):
+        canvas_color[cell_value] = canvas_color.get(cell_value, 0) + 1
+    canvas_color = max(canvas_color, key=canvas_color.get)
 
     canvas_cells = [
         (row, col)

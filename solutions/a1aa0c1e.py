@@ -60,4 +60,5 @@ def transform(grid):
             nearest_index = index
     if nearest_index >= 0:
         result[len(result) - 1 - nearest_index][4] = 5
-    return result
+    output = result
+    return output

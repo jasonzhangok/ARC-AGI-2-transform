@@ -1,4 +1,3 @@
-from collections import Counter
 
 
 def transform(grid):
@@ -21,10 +20,22 @@ def transform(grid):
         if sum(grid[row][col] != 0 for row in range(height)) > height // 2
     )
 
-    top_color = Counter(grid[top]).most_common(1)[0][0]
-    bottom_color = Counter(grid[bottom]).most_common(1)[0][0]
-    left_color = Counter(grid[row][left] for row in range(height)).most_common(1)[0][0]
-    right_color = Counter(grid[row][right] for row in range(height)).most_common(1)[0][0]
+    top_color = {}
+    for cell_value in (grid[top]):
+        top_color[cell_value] = top_color.get(cell_value, 0) + 1
+    top_color = max(top_color, key=top_color.get)
+    bottom_color = {}
+    for cell_value in (grid[bottom]):
+        bottom_color[cell_value] = bottom_color.get(cell_value, 0) + 1
+    bottom_color = max(bottom_color, key=bottom_color.get)
+    left_color = {}
+    for cell_value in (grid[row][left] for row in range(height)):
+        left_color[cell_value] = left_color.get(cell_value, 0) + 1
+    left_color = max(left_color, key=left_color.get)
+    right_color = {}
+    for cell_value in (grid[row][right] for row in range(height)):
+        right_color[cell_value] = right_color.get(cell_value, 0) + 1
+    right_color = max(right_color, key=right_color.get)
     output = [row[:] for row in grid]
 
     for row in range(top + 1, bottom):

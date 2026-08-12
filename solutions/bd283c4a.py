@@ -23,4 +23,5 @@ def transform(grid):
             column = position // height
             result[row][column] = color
             position += 1
-    return result
+    output = result
+    return output

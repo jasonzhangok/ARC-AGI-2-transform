@@ -17,4 +17,5 @@ def transform(grid):
             for c in range(out_w):
                 if layer[r][c] != 0:
                     out[r][c] = layer[r][c]
-    return out
+    output = out
+    return output

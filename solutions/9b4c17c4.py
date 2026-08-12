@@ -1,4 +1,3 @@
-from collections import Counter, deque
 
 
 def transform(grid):
@@ -13,11 +12,11 @@ def transform(grid):
         for c in range(w):
             if grid[r][c] != 2 or (r, c) in seen:
                 continue
-            queue = deque([(r, c)])
+            queue = list([(r, c)])
             seen.add((r, c))
             component = []
             while queue:
-                x, y = queue.popleft()
+                x, y = queue.pop(0)
                 component.append((x, y))
                 for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
                     if 0 <= nx < h and 0 <= ny < w and grid[nx][ny] == 2 and (nx, ny) not in seen:
@@ -28,7 +27,10 @@ def transform(grid):
                 for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
                     if 0 <= nx < h and 0 <= ny < w and grid[nx][ny] in (1, 8):
                         neighbors.append(grid[nx][ny])
-            background = Counter(neighbors).most_common(1)[0][0]
+            background = {}
+            for cell_value in (neighbors):
+                background[cell_value] = background.get(cell_value, 0) + 1
+            background = max(background, key=background.get)
             for x, y in component:
                 output[x][y] = background
             c0, c1 = min(y for _, y in component), max(y for _, y in component)

@@ -6,4 +6,5 @@ def transform(grid):
         color = grid[r][-1]
         for c, v in enumerate(bottom):
             if v == color: out[r][c] = color
-    return out
+    output = out
+    return output

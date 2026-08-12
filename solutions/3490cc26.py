@@ -77,4 +77,5 @@ def transform(grid):
                         result[r][c] = 7
         visited.add(next_index)
         current = next_index
-    return result
+    output = result
+    return output

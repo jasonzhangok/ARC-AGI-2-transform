@@ -14,4 +14,5 @@ def transform(grid):
         r, c = r + dr, c + dc
     if 0 <= r < h and 0 <= c < w:
         out[r][c] = 7
-    return out
+    output = out
+    return output

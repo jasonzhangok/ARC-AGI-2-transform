@@ -13,4 +13,5 @@ def transform(grid):
         _, nr, nc = min(candidates)
         if 0 <= nr < h and 0 <= nc < w:
             out[nr][nc] = 5
-    return out
+    output = out
+    return output

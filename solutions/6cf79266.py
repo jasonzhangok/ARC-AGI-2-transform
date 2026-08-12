@@ -8,4 +8,5 @@ def transform(grid):
     for r,c in blocks:
         for i in range(3):
             for j in range(3): out[r+i][c+j]=1
-    return out
+    output = out
+    return output

@@ -9,4 +9,5 @@ def transform(grid):
     bottom = max(r for r, _ in fives) + 1
     left = min(c for _, c in fives)
     right = max(c for _, c in fives)
-    return [row[left : right + 1] for row in grid[top : bottom + 1]]
+    output = [row[left : right + 1] for row in grid[top : bottom + 1]]
+    return output

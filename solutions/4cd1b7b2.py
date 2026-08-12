@@ -2,20 +2,25 @@ def transform(grid):
     out = [row[:] for row in grid]
     n = len(out)
 
-    def solve(pos):
-        if pos == n * n:
-            return True
-        r, c = divmod(pos, n)
-        if out[r][c] != 0:
-            return solve(pos + 1)
-        used = set(out[r]) | {out[y][c] for y in range(n)}
-        for value in range(1, n + 1):
-            if value not in used:
-                out[r][c] = value
-                if solve(pos + 1):
-                    return True
-        out[r][c] = 0
-        return False
-
-    solve(0)
-    return out
+    empty = [(row, col) for row in range(n) for col in range(n) if out[row][col] == 0]
+    choices = [0] * len(empty)
+    index = 0
+    while 0 <= index < len(empty):
+        row, col = empty[index]
+        used = set(out[row]) | {out[y][col] for y in range(n)}
+        value = choices[index] + 1
+        while value <= n and value in used:
+            value += 1
+        if value <= n:
+            out[row][col] = value
+            choices[index] = value
+            index += 1
+        else:
+            out[row][col] = 0
+            choices[index] = 0
+            index -= 1
+            if index >= 0:
+                previous_row, previous_col = empty[index]
+                out[previous_row][previous_col] = 0
+    output = out
+    return output

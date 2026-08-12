@@ -18,4 +18,5 @@ def transform(grid):
         x = ref_center + (c - payload_center)
         if 0 <= y < len(out) and 0 <= x < w:
             out[y][x] = payload_color
-    return out
+    output = out
+    return output

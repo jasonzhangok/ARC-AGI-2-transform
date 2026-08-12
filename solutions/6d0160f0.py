@@ -1,19 +1,3 @@
-"""Solution for ARC task 6d0160f0."""
-
-
-def _segments(length, separators):
-    """Return the index ranges between separator lines."""
-    segments = []
-    start = 0
-    for separator in separators:
-        if start < separator:
-            segments.append(range(start, separator))
-        start = separator + 1
-    if start < length:
-        segments.append(range(start, length))
-    return segments
-
-
 def transform(grid):
     """Move the panel containing 4 to the panel named by 4's local position."""
     height = len(grid)
@@ -29,8 +13,22 @@ def transform(grid):
         for column_index in range(width)
         if all(grid[row_index][column_index] == 5 for row_index in range(height))
     ]
-    row_segments = _segments(height, separator_rows)
-    column_segments = _segments(width, separator_columns)
+    row_segments = []
+    start = 0
+    for separator in separator_rows:
+        if start < separator:
+            row_segments.append(range(start, separator))
+        start = separator + 1
+    if start < height:
+        row_segments.append(range(start, height))
+    column_segments = []
+    start = 0
+    for separator in separator_columns:
+        if start < separator:
+            column_segments.append(range(start, separator))
+        start = separator + 1
+    if start < width:
+        column_segments.append(range(start, width))
 
     result = [
         [
@@ -56,12 +54,12 @@ def transform(grid):
                         destination = (local_row, local_column)
 
     if source is None:
-        return [row[:] for row in grid]
-
-    destination_rows = row_segments[destination[0]]
-    destination_columns = column_segments[destination[1]]
-    for local_row, row_index in enumerate(destination_rows):
-        for local_column, column_index in enumerate(destination_columns):
-            result[row_index][column_index] = source[local_row][local_column]
-
-    return result
+        output = [row[:] for row in grid]
+    else:
+        destination_rows = row_segments[destination[0]]
+        destination_columns = column_segments[destination[1]]
+        for local_row, row_index in enumerate(destination_rows):
+            for local_column, column_index in enumerate(destination_columns):
+                result[row_index][column_index] = source[local_row][local_column]
+        output = result
+    return output

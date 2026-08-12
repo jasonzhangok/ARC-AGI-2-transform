@@ -17,7 +17,8 @@ def transform(grid):
     else:
         replacement = 3
 
-    return [
+    output = [
         [0 if value == 1 else replacement if value == 8 else value for value in row]
         for row in grid
     ]
+    return output

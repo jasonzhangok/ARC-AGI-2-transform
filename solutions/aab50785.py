@@ -7,4 +7,5 @@ def transform(grid):
         cols=sorted(c for rr,c in blocks if rr==r)
         for left,right in zip(cols[::2],cols[1::2]):
             pieces.extend([grid[r+i][left+2:right] for i in range(2)])
-    return pieces
+    output = pieces
+    return output

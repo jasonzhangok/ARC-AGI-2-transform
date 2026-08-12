@@ -7,4 +7,5 @@ def transform(grid):
     out=[[2]*size for _ in range(size)]
     for r in range(1,size-1):
         for c in range(1,size-1): out[r][c]=pat[(r-1)//scale][(c-1)//scale]
-    return out
+    output = out
+    return output

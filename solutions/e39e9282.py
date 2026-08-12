@@ -48,4 +48,5 @@ def transform(grid):
                     target_col = col + 2 * delta_col
                     if 0 <= target_row < height and 0 <= target_col < width:
                         result[target_row][target_col] = 9
-    return result
+    output = result
+    return output

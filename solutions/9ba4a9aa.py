@@ -21,6 +21,8 @@ def transform(grid):
         if guide_color is None or counts[color] > counts[guide_color]:
             guide_color = color
 
+    output = []
+    found = False
     for row in range(height - 2):
         for col in range(width - 2):
             border = []
@@ -50,9 +52,12 @@ def transform(grid):
                 ):
                     touches_guide = True
             if touches_guide:
-                return [
+                output = [
                     grid[source_row][col:col + 3]
                     for source_row in range(row, row + 3)
                 ]
-
-    return []
+                found = True
+                break
+        if found:
+            break
+    return output

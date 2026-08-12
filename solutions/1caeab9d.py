@@ -1,28 +1,32 @@
-from collections import deque
-
-
 def transform(grid):
-    height, width = len(grid), len(grid[0])
-    remaining = {(r, c) for r in range(height) for c in range(width) if grid[r][c] != 0}
-    components = []
-    while remaining:
-        start = remaining.pop()
-        color = grid[start[0]][start[1]]
-        queue = deque([start])
-        component = {start}
-        while queue:
-            row, col = queue.popleft()
-            for point in ((row - 1, col), (row + 1, col), (row, col - 1), (row, col + 1)):
-                if point in remaining and grid[point[0]][point[1]] == color:
-                    remaining.remove(point)
-                    component.add(point)
-                    queue.append(point)
-        components.append(component)
-    anchor = next(component for component in components if grid[next(iter(component))[0]][next(iter(component))[1]] == 1)
-    target_top = min(r for r, _ in anchor)
-    output = [[0] * width for _ in range(height)]
-    for component in components:
-        top = min(r for r, _ in component)
-        for row, col in component:
-            output[target_top + row - top][col] = grid[row][col]
+    height = len(grid)
+    width = len(grid[0])
+
+    color_counts = {}
+    color_positions = {}
+    for row in range(height):
+        for col in range(width):
+            color = grid[row][col]
+            color_counts[color] = color_counts.get(color, 0) + 1
+            if color not in color_positions:
+                color_positions[color] = []
+            color_positions[color].append((row, col))
+    background = 0
+    background_count = -1
+    for color in color_counts:
+        if color_counts[color] > background_count:
+            background = color
+            background_count = color_counts[color]
+
+    blue_top = min(row for row, col in color_positions[1])
+    output = [[background for col in range(width)] for row in range(height)]
+    for color in color_positions:
+        if color == background:
+            continue
+        cells = color_positions[color]
+        object_top = min(row for row, col in cells)
+        row_shift = blue_top - object_top
+        for row, col in cells:
+            output[row + row_shift][col] = color
+
     return output

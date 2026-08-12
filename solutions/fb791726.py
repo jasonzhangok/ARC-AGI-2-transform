@@ -12,4 +12,5 @@ def transform(grid):
     for r in separator_rows:
         out[r] = [3] * (2 * w)
         out[r + h] = [3] * (2 * w)
-    return out
+    output = out
+    return output

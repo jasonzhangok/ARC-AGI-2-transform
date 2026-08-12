@@ -1,9 +1,11 @@
-from collections import Counter, deque
 
 
 def transform(grid):
     height, width = len(grid), len(grid[0])
-    background = Counter(value for row in grid for value in row).most_common(1)[0][0]
+    background = {}
+    for cell_value in (value for row in grid for value in row):
+        background[cell_value] = background.get(cell_value, 0) + 1
+    background = max(background, key=background.get)
     output = [row[:] for row in grid]
     seen = set()
 
@@ -12,11 +14,11 @@ def transform(grid):
             if grid[start_row][start_col] == background or (start_row, start_col) in seen:
                 continue
             color = grid[start_row][start_col]
-            queue = deque([(start_row, start_col)])
+            queue = list([(start_row, start_col)])
             seen.add((start_row, start_col))
             component = set()
             while queue:
-                row, col = queue.popleft()
+                row, col = queue.pop(0)
                 component.add((row, col))
                 for dr, dc in ((-1, 0), (1, 0), (0, -1), (0, 1)):
                     y, x = row + dr, col + dc

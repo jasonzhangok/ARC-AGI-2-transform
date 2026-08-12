@@ -7,4 +7,5 @@ def transform(grid):
         shifted = c - (bottom - r)
         if 0 <= shifted < width:
             result[r][shifted] = grid[r][c]
-    return result
+    output = result
+    return output

@@ -55,4 +55,5 @@ def transform(grid):
                 if 0 <= row < height and result[row][column] != 2:
                     result[row][column] = 8
 
-    return result
+    output = result
+    return output

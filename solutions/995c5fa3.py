@@ -33,4 +33,5 @@ def transform(grid):
             color = 8
         colors.append(color)
 
-    return [[color] * len(colors) for color in colors]
+    output = [[color] * len(colors) for color in colors]
+    return output

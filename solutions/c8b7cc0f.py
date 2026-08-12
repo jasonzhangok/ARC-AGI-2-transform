@@ -19,7 +19,8 @@ def transform(grid):
     marker_color = markers[0]
     marker_count = len(markers)
 
-    return [
+    output = [
         [marker_color if row * 3 + col < marker_count else 0 for col in range(3)]
         for row in range(3)
     ]
+    return output

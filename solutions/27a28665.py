@@ -13,4 +13,5 @@ def transform(grid):
         color = 2
     else:
         color = 3
-    return [[color]]
+    output = [[color]]
+    return output

@@ -43,4 +43,5 @@ def transform(grid):
                     else:
                         output_row.append(0)
             result.append(output_row)
-    return result
+    output = result
+    return output

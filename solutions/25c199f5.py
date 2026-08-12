@@ -22,4 +22,5 @@ def transform(grid):
         for r, c, color in cells:
             result[r + delta][c] = color
         bottom -= object_height
-    return result
+    output = result
+    return output

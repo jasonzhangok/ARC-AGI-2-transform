@@ -12,17 +12,20 @@ def transform(grid):
     by_cell = {cell: [] for cell in cells}
     for candidate in candidates:
         for cell in candidate[1]: by_cell[cell].append(candidate)
-    def cover(remaining):
-        if not remaining: return []
+    stack = [(cells, [])]
+    pieces = None
+    while stack and pieces is None:
+        remaining, selected = stack.pop()
+        if not remaining:
+            pieces = selected
+            break
         cell = min(remaining)
         options = [x for x in by_cell[cell] if x[1] <= remaining]
-        options.sort(key=lambda x: (-len(x[1]), x[0]))
-        for color, shape in options:
-            rest = cover(remaining - shape)
-            if rest is not None: return [(color, shape)] + rest
-        return None
-    pieces = cover(cells)
+        options = [record[2] for record in sorted(((-len(item[1]), item[0]), index, item) for index, item in enumerate(options))]
+        for color, shape in reversed(options):
+            stack.append((remaining - shape, selected + [(color, shape)]))
     out = [[0] * w for _ in range(h)]
     for color, shape in pieces:
         for r, c in shape: out[r][c] = color
-    return out
+    output = out
+    return output

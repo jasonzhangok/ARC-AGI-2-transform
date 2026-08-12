@@ -30,4 +30,5 @@ def transform(grid):
             block = block_entry[1]
             for row, col in block:
                 result[row][col] = 8
-    return result
+    output = result
+    return output

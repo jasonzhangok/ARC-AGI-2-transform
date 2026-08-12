@@ -11,7 +11,6 @@ def transform(grid):
         if counts[value] > largest:
             largest = counts[value]
             background = value
-
     best_size = 0
     best_box = None
     colors = list(counts)
@@ -63,7 +62,6 @@ def transform(grid):
                         bottom_left.append((r, c))
                     if br:
                         bottom_right.append((r, c))
-
             bottom_right_set = set(bottom_right)
             for top, left in top_left:
                 for other_top, right_square in top_right:
@@ -84,7 +82,6 @@ def transform(grid):
                             arms.add((bottom_square + offset, left))
                             arms.add((bottom_square + size - 1, right_square + offset))
                             arms.add((bottom_square + offset, right_square + size - 1))
-
                         motif = []
                         valid = True
                         for r in range(top, bottom_square + size):
@@ -94,7 +91,7 @@ def transform(grid):
                                 if grid[r][c] != color:
                                     valid = False
                                 motif.append((r, c))
-                        if valid and motif and size > best_size:
+                        if valid and motif and (size > best_size):
                             motif_top = motif[0][0]
                             motif_bottom = motif[0][0]
                             motif_left = motif[0][1]
@@ -110,11 +107,12 @@ def transform(grid):
                                     motif_right = c
                             best_size = size
                             best_box = (motif_top, motif_left, motif_bottom, motif_right)
-
     if best_box is None:
-        return [row[:] for row in grid]
-    top, left, bottom, right = best_box
-    output = []
-    for r in range(top, bottom + 1):
-        output.append(grid[r][left:right + 1])
+        output = [row[:] for row in grid]
+    else:
+        top, left, bottom, right = best_box
+        output = []
+        for r in range(top, bottom + 1):
+            output.append(grid[r][left:right + 1])
+        output = output
     return output

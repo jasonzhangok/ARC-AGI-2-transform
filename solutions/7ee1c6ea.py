@@ -11,4 +11,5 @@ def transform(grid):
         for c in range(c0+1,c1):
             if grid[r][c]==a:out[r][c]=b
             elif grid[r][c]==b:out[r][c]=a
-    return out
+    output = out
+    return output

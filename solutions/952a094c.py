@@ -26,4 +26,5 @@ def transform(grid):
         target_c = right + 1 if c < middle_c else left - 1
         if 0 <= target_r < h and 0 <= target_c < w:
             out[target_r][target_c] = color
-    return out
+    output = out
+    return output

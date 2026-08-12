@@ -1,26 +1,27 @@
-from collections import Counter, deque
-
-
 def transform(grid):
-    height, width = len(grid), len(grid[0])
-    counts = Counter(value for row in grid for value in row)
-    background = counts.most_common(1)[0][0]
+    height, width = (len(grid), len(grid[0]))
+    counts = {}
+    for cell_value in (value for row in grid for value in row):
+        counts[cell_value] = counts.get(cell_value, 0) + 1
+    background = max(counts, key=counts.get)
     remaining = {(r, c) for r in range(height) for c in range(width) if grid[r][c] != background}
     components = []
     while remaining:
         start = remaining.pop()
         component = {start}
-        queue = deque([start])
+        queue = list([start])
         while queue:
-            r, c = queue.popleft()
+            r, c = queue.pop(0)
             for rr, cc in ((r - 1, c), (r + 1, c), (r, c - 1), (r, c + 1)):
                 if (rr, cc) in remaining:
                     remaining.remove((rr, cc))
                     component.add((rr, cc))
                     queue.append((rr, cc))
         components.append(component)
-
-    base = Counter(grid[r][c] for comp in components for r, c in comp).most_common(1)[0][0]
+    base = {}
+    for cell_value in (grid[r][c] for comp in components for r, c in comp):
+        base[cell_value] = base.get(cell_value, 0) + 1
+    base = max(base, key=base.get)
     boxes = []
     for comp in components:
         rows = [r for r, _ in comp]
@@ -34,4 +35,5 @@ def transform(grid):
             for c in range(left, right + 1):
                 if grid[r][c] != base:
                     result[r - top][c - left] = grid[r][c]
-    return result
+    output = result
+    return output

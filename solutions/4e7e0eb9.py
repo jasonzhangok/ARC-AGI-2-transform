@@ -7,12 +7,12 @@ def transform(grid):
                   if len({grid[r][c] for r in range(h)}) == 1
                   and grid[0][c] not in (0, 4)]
 
-    def intervals(n, splits):
-        b = [-1] + splits + [n]
-        return [(b[i] + 1, b[i + 1]) for i in range(len(b) - 1) if b[i] + 1 < b[i + 1]]
-
-    for r0, r1 in intervals(h, split_rows):
-        for c0, c1 in intervals(w, split_cols):
+    row_bounds = [-1] + split_rows + [h]
+    row_intervals = [(row_bounds[i] + 1, row_bounds[i + 1]) for i in range(len(row_bounds) - 1) if row_bounds[i] + 1 < row_bounds[i + 1]]
+    col_bounds = [-1] + split_cols + [w]
+    col_intervals = [(col_bounds[i] + 1, col_bounds[i + 1]) for i in range(len(col_bounds) - 1) if col_bounds[i] + 1 < col_bounds[i + 1]]
+    for r0, r1 in row_intervals:
+        for c0, c1 in col_intervals:
             if r1 - r0 != 9 or c1 - c0 != 9:
                 continue
             blocks = []
@@ -38,4 +38,5 @@ def transform(grid):
                     for r in range(br, br + 3):
                         for c in range(bc, bc + 3):
                             out[r0 + r][c0 + c] = new[bi][bj]
-    return out
+    output = out
+    return output

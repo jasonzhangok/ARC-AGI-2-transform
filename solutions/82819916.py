@@ -11,4 +11,5 @@ def transform(grid):
         if len(vals)==2 and row!=template:
             mapping={source[0]:vals[0],source[1]:vals[1]}
             out[r]=[mapping[v] for v in template]
-    return out
+    output = out
+    return output

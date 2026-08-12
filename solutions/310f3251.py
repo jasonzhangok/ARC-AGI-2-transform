@@ -9,4 +9,5 @@ def transform(grid):
         for c, value in enumerate(row):
             if value != 0:
                 tile[r][c] = value
-    return [tile[r % height] * 3 for r in range(height * 3)]
+    output = [tile[r % height] * 3 for r in range(height * 3)]
+    return output

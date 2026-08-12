@@ -5,4 +5,5 @@ def transform(grid):
         for i in range(n):out[i][i]=5
     else:
         for i in range(n):out[i][n-1-i]=5
-    return out
+    output = out
+    return output

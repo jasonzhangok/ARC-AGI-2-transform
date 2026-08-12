@@ -10,4 +10,5 @@ def transform(grid):
             for x in range(max(0, c - radius), min(w, c + radius + 1)):
                 if out[y][x] == 0:
                     out[y][x] = 2
-    return out
+    output = out
+    return output

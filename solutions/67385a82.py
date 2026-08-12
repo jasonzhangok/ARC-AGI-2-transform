@@ -15,4 +15,5 @@ def transform(grid):
     for target in comps:
         if len(target) > 1:
             for r,c in target: out[r][c]=8
-    return out
+    output = out
+    return output

@@ -130,4 +130,5 @@ def transform(grid):
                 for c in range(left + shift_c, right + shift_c + 1):
                     result[r][c] = color
 
-    return result
+    output = result
+    return output

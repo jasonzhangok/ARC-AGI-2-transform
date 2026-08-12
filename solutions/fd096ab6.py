@@ -11,7 +11,12 @@ def transform(grid):
         }
         for color in colors
     }
-    template_color = max(colors, key=lambda color: len(positions[color]))
+    template_color = None
+    template_size = -1
+    for color in colors:
+        if len(positions[color]) > template_size:
+            template_color = color
+            template_size = len(positions[color])
     template_top = min(row for row, _ in positions[template_color])
     template_left = min(col for _, col in positions[template_color])
     shape = {
@@ -21,17 +26,28 @@ def transform(grid):
 
     output = [row[:] for row in grid]
     for color in colors:
-        translations = set()
-        for fragment_row, fragment_col in positions[color]:
-            for shape_row, shape_col in shape:
-                row_offset = fragment_row - shape_row
-                col_offset = fragment_col - shape_col
-                if all(
-                    (row - row_offset, col - col_offset) in shape
-                    for row, col in positions[color]
-                ):
-                    translations.add((row_offset, col_offset))
-        row_offset, col_offset = next(iter(translations))
-        for row, col in shape:
-            output[row + row_offset][col + col_offset] = color
+        uncovered = set(positions[color])
+        while uncovered:
+            best_offset = None
+            best_overlap = set()
+            for fragment_row, fragment_col in uncovered:
+                for shape_row, shape_col in shape:
+                    row_offset = fragment_row - shape_row
+                    col_offset = fragment_col - shape_col
+                    translated = {
+                        (row + row_offset, col + col_offset)
+                        for row, col in shape
+                    }
+                    if all(
+                        0 <= row < height and 0 <= col < width
+                        for row, col in translated
+                    ):
+                        overlap = translated & uncovered
+                        if len(overlap) > len(best_overlap):
+                            best_offset = (row_offset, col_offset)
+                            best_overlap = overlap
+            row_offset, col_offset = best_offset
+            for row, col in shape:
+                output[row + row_offset][col + col_offset] = color
+            uncovered -= best_overlap
     return output

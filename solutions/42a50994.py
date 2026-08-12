@@ -16,4 +16,5 @@ def transform(grid):
             )
             if not has_neighbor:
                 result[r][c] = 0
-    return result
+    output = result
+    return output

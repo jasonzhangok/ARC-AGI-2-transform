@@ -26,4 +26,5 @@ def transform(grid):
     for r in range(top, bottom + 1):
         for c in range(left, right + 1):
             result[r][c] = 6
-    return result
+    output = result
+    return output

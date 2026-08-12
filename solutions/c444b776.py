@@ -1,13 +1,3 @@
-def _spans(size, separators):
-    result = []
-    start = 0
-    for separator in separators:
-        result.append((start, separator))
-        start = separator + 1
-    result.append((start, size))
-    return result
-
-
 def transform(grid):
     height = len(grid)
     width = len(grid[0])
@@ -19,8 +9,26 @@ def transform(grid):
         col for col in range(width)
         if all(grid[row][col] == 4 for row in range(height))
     ]
-    row_spans = _spans(height, separator_rows)
-    col_spans = _spans(width, separator_cols)
+    _size = height
+    _separators = separator_rows
+    result = []
+    start = 0
+    for separator in _separators:
+        result.append((start, separator))
+        start = separator + 1
+    result.append((start, _size))
+    _spans_result_1 = result
+    row_spans = _spans_result_1
+    _size = width
+    _separators = separator_cols
+    result = []
+    start = 0
+    for separator in _separators:
+        result.append((start, separator))
+        start = separator + 1
+    result.append((start, _size))
+    _spans_result_2 = result
+    col_spans = _spans_result_2
     cell_height = min(bottom - top for top, bottom in row_spans)
     cell_width = min(right - left for left, right in col_spans)
     output = [row[:] for row in grid]

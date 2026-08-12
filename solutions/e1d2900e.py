@@ -51,4 +51,5 @@ def transform(grid):
         result[row][col] = 0
     for row, col, new_row, new_col in moves:
         result[new_row][new_col] = 1
-    return result
+    output = result
+    return output

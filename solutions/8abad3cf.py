@@ -1,15 +1,15 @@
-from collections import Counter
-from math import isqrt
 
 
 def transform(grid):
-    counts = Counter(value for row in grid for value in row)
-    background = counts.most_common(1)[0][0]
+    counts = {}
+    for cell_value in (value for row in grid for value in row):
+        counts[cell_value] = counts.get(cell_value, 0) + 1
+    background = max(counts, key=counts.get)
     squares = []
     for color, count in counts.items():
         if color == background:
             continue
-        side = isqrt(count)
+        side = int((count)**0.5)
         if side * side == count:
             squares.append((side, color))
     squares.sort()

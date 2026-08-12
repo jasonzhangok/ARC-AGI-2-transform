@@ -1,7 +1,6 @@
-from collections import Counter
 
 
-def transform(grid: list[list[int]]) -> list[list[int]]:
+def transform(grid):
     """Crop to the four spanning lines and extend interior dots to a matching edge."""
     height = len(grid)
     width = len(grid[0])
@@ -19,18 +18,22 @@ def transform(grid: list[list[int]]) -> list[list[int]]:
 
     output = [row[left:right + 1] for row in grid[top:bottom + 1]]
 
-    top_color = Counter(
-        grid[top][col] for col in range(width) if col not in line_cols
-    ).most_common(1)[0][0]
-    bottom_color = Counter(
-        grid[bottom][col] for col in range(width) if col not in line_cols
-    ).most_common(1)[0][0]
-    left_color = Counter(
-        grid[row][left] for row in range(height) if row not in line_rows
-    ).most_common(1)[0][0]
-    right_color = Counter(
-        grid[row][right] for row in range(height) if row not in line_rows
-    ).most_common(1)[0][0]
+    top_color = {}
+    for cell_value in (grid[top][col] for col in range(width) if col not in line_cols):
+        top_color[cell_value] = top_color.get(cell_value, 0) + 1
+    top_color = max(top_color, key=top_color.get)
+    bottom_color = {}
+    for cell_value in (grid[bottom][col] for col in range(width) if col not in line_cols):
+        bottom_color[cell_value] = bottom_color.get(cell_value, 0) + 1
+    bottom_color = max(bottom_color, key=bottom_color.get)
+    left_color = {}
+    for cell_value in (grid[row][left] for row in range(height) if row not in line_rows):
+        left_color[cell_value] = left_color.get(cell_value, 0) + 1
+    left_color = max(left_color, key=left_color.get)
+    right_color = {}
+    for cell_value in (grid[row][right] for row in range(height) if row not in line_rows):
+        right_color[cell_value] = right_color.get(cell_value, 0) + 1
+    right_color = max(right_color, key=right_color.get)
 
     for row in range(top + 1, bottom):
         for col in range(left + 1, right):

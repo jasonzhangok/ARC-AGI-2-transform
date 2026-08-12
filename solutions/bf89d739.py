@@ -14,29 +14,29 @@ def transform(grid):
         if first[0] == second[0] or first[1] == second[1]
     )
 
-    def paint(row, col):
-        if output[row][col] == 0:
-            output[row][col] = 3
-
     if first[0] == second[0]:
         backbone_row = first[0]
         left, right = sorted((first[1], second[1]))
         for col in range(left, right + 1):
-            paint(backbone_row, col)
+            if output[backbone_row][col] == 0:
+                output[backbone_row][col] = 3
         for row, col in markers:
             if (row, col) not in (first, second):
                 top, bottom = sorted((row, backbone_row))
                 for branch_row in range(top, bottom + 1):
-                    paint(branch_row, col)
+                    if output[branch_row][col] == 0:
+                        output[branch_row][col] = 3
     else:
         backbone_col = first[1]
         top, bottom = sorted((first[0], second[0]))
         for row in range(top, bottom + 1):
-            paint(row, backbone_col)
+            if output[row][backbone_col] == 0:
+                output[row][backbone_col] = 3
         for row, col in markers:
             if (row, col) not in (first, second):
                 left, right = sorted((col, backbone_col))
                 for branch_col in range(left, right + 1):
-                    paint(row, branch_col)
+                    if output[row][branch_col] == 0:
+                        output[row][branch_col] = 3
 
     return output

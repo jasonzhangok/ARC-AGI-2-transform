@@ -16,4 +16,5 @@ def transform(grid):
         for r1, r2 in zip(rows, rows[1:]):
             for r in range(r1 + 2, r2 - 1):
                 if out[r][c] == 0: out[r][c] = 1
-    return out
+    output = out
+    return output

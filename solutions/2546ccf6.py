@@ -1,6 +1,3 @@
-from collections import defaultdict
-
-
 def transform(grid):
     height, width = len(grid), len(grid[0])
     separator = next(
@@ -20,7 +17,7 @@ def transform(grid):
         for i in range(len(column_bounds) - 1)
     ]
 
-    panels_by_color = defaultdict(list)
+    panels_by_color = {}
     for panel_row, rows in enumerate(row_ranges):
         for panel_column, columns in enumerate(column_ranges):
             colors = {
@@ -30,7 +27,7 @@ def transform(grid):
                 if grid[r][c] not in (0, separator)
             }
             for color in colors:
-                panels_by_color[color].append((panel_row, panel_column))
+                panels_by_color.setdefault(color, []).append((panel_row, panel_column))
 
     result = [row[:] for row in grid]
     for color, occupied in panels_by_color.items():
@@ -55,4 +52,5 @@ def transform(grid):
         for target_r, source_r in zip(target_rows, reversed(source_rows)):
             for target_c, source_c in zip(target_columns, reversed(source_columns)):
                 result[target_r][target_c] = grid[source_r][source_c]
-    return result
+    output = result
+    return output

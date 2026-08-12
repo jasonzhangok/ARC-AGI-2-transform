@@ -1,4 +1,3 @@
-from collections import Counter
 
 
 def transform(grid):
@@ -43,12 +42,12 @@ def transform(grid):
                 frames.append((color, top, bottom, left, right))
                 frame_cells.update(border)
 
-    loose_counts = Counter(
-        grid[row][col]
+    loose_counts = {}
+    for cell_value in (grid[row][col]
         for row in range(height)
         for col in range(width)
-        if grid[row][col] != 0 and (row, col) not in frame_cells
-    )
+        if grid[row][col] != 0 and (row, col) not in frame_cells):
+        loose_counts[cell_value] = loose_counts.get(cell_value, 0) + 1
     output = [[0] * width for _ in range(height)]
     for frame_color, top, bottom, left, right in frames:
         for row in range(top, bottom + 1):

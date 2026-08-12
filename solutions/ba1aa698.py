@@ -1,4 +1,3 @@
-from collections import Counter
 
 
 def transform(grid):
@@ -19,7 +18,10 @@ def transform(grid):
         for row in range(1, height - 1)
         for col in range(left + 1, right)
     ]
-    background = Counter(interior_values).most_common(1)[0][0]
+    background = {}
+    for cell_value in (interior_values):
+        background[cell_value] = background.get(cell_value, 0) + 1
+    background = max(background, key=background.get)
 
     objects = []
     for left, right in panels:
@@ -41,7 +43,10 @@ def transform(grid):
         vertical_step = 0
     else:
         steps = [b - a for a, b in zip(tops, tops[1:])]
-        vertical_step = Counter(steps).most_common(1)[0][0]
+        vertical_step = {}
+        for cell_value in (steps):
+            vertical_step[cell_value] = vertical_step.get(cell_value, 0) + 1
+        vertical_step = max(vertical_step, key=vertical_step.get)
     next_top = tops[-1] + vertical_step
 
     # A downward sequence can end one raster cell short when evenly sampled

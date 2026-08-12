@@ -23,4 +23,5 @@ def transform(grid):
         sr=sc=0
         while all(0<=r+sr+dr<h and 0<=c+sc+dc<w and out[r+sr+dr][c+sc+dc]==0 for r,c,_ in cells): sr+=dr;sc+=dc
         for r,c,v in cells: out[r+sr][c+sc]=v
-    return out
+    output = out
+    return output

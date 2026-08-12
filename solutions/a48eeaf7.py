@@ -11,4 +11,5 @@ def transform(grid):
             nr = min(max(r, r0 - 1), r1 + 1)
             nc = min(max(c, c0 - 1), c1 + 1)
             out[nr][nc] = 5
-    return out
+    output = out
+    return output

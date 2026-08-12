@@ -1,74 +1,12 @@
-from collections import Counter
-
-
-def _object_box(grid, row, col, background, key_colors):
-    """Find the unique 5-by-5 two-color object containing a key pixel."""
-    height, width = len(grid), len(grid[0])
-    candidates = []
-
-    for top in range(max(0, row - 4), min(row, height - 5) + 1):
-        for left in range(max(0, col - 4), min(col, width - 5) + 1):
-            cells = [
-                grid[r][c]
-                for r in range(top, top + 5)
-                for c in range(left, left + 5)
-                if grid[r][c] != background
-            ]
-            if set(cells) != {grid[row][col]} | (
-                set(cells) - key_colors
-            ):
-                continue
-            if len(set(cells)) != 2:
-                continue
-            if sum(color in key_colors for color in cells) != 1:
-                continue
-
-            touches_every_side = (
-                any(grid[top][c] != background for c in range(left, left + 5))
-                and any(
-                    grid[top + 4][c] != background
-                    for c in range(left, left + 5)
-                )
-                and any(grid[r][left] != background for r in range(top, top + 5))
-                and any(
-                    grid[r][left + 4] != background
-                    for r in range(top, top + 5)
-                )
-            )
-            if touches_every_side:
-                candidates.append((top, left))
-
-    if len(candidates) != 1:
-        return None
-    return candidates[0]
-
-
-def _four_components(points):
-    remaining = set(points)
-    components = []
-    while remaining:
-        stack = [remaining.pop()]
-        component = set(stack)
-        while stack:
-            row, col = stack.pop()
-            for neighbor in (
-                (row - 1, col),
-                (row + 1, col),
-                (row, col - 1),
-                (row, col + 1),
-            ):
-                if neighbor in remaining:
-                    remaining.remove(neighbor)
-                    stack.append(neighbor)
-                    component.add(neighbor)
-        components.append(component)
-    return components
-
-
 def transform(grid):
     output = [row[:] for row in grid]
     height, width = len(grid), len(grid[0])
-    background = Counter(value for row in grid for value in row).most_common(1)[0][0]
+    counts={}
+    for source_row in grid:
+        for value in source_row:counts[value]=counts.get(value,0)+1
+    background=None
+    for value in counts:
+        if background is None or counts[value]>counts[background]:background=value
 
     corners = ((0, 0), (0, width - 1), (height - 1, 0), (height - 1, width - 1))
     corner_set = set(corners)
@@ -87,7 +25,15 @@ def transform(grid):
             if (row, col) in corner_set or key not in key_colors:
                 continue
 
-            box = _object_box(grid, row, col, background, key_colors)
+            candidates=[]
+            for candidate_top in range(max(0,row-4),min(row,height-5)+1):
+                for candidate_left in range(max(0,col-4),min(col,width-5)+1):
+                    candidate_cells=[grid[r][c] for r in range(candidate_top,candidate_top+5) for c in range(candidate_left,candidate_left+5) if grid[r][c]!=background]
+                    if set(candidate_cells)!={grid[row][col]}|(set(candidate_cells)-key_colors):continue
+                    if len(set(candidate_cells))!=2 or sum(color in key_colors for color in candidate_cells)!=1:continue
+                    touches=(any(grid[candidate_top][c]!=background for c in range(candidate_left,candidate_left+5)) and any(grid[candidate_top+4][c]!=background for c in range(candidate_left,candidate_left+5)) and any(grid[r][candidate_left]!=background for r in range(candidate_top,candidate_top+5)) and any(grid[r][candidate_left+4]!=background for r in range(candidate_top,candidate_top+5)))
+                    if touches:candidates.append((candidate_top,candidate_left))
+            box=candidates[0] if len(candidates)==1 else None
             if box is None:
                 continue
             top, left = box
@@ -107,7 +53,14 @@ def transform(grid):
                 if grid[r][c] != background
             }
             marker = (row - top, col - left)
-            components = _four_components(mask - {marker})
+            remaining=set(mask-{marker});components=[]
+            while remaining:
+                stack=[remaining.pop()];component=set(stack)
+                while stack:
+                    component_row,component_col=stack.pop()
+                    for neighbor in ((component_row-1,component_col),(component_row+1,component_col),(component_row,component_col-1),(component_row,component_col+1)):
+                        if neighbor in remaining:remaining.remove(neighbor);stack.append(neighbor);component.add(neighbor)
+                components.append(component)
             largest = max(len(component) for component in components)
             adjacent_to_largest = any(
                 abs(r - marker[0]) + abs(c - marker[1]) == 1

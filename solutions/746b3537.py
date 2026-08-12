@@ -8,4 +8,5 @@ def transform(grid):
         for v in row:
             if not nr or v!=nr[-1]:nr.append(v)
         out.append(nr)
-    return out
+    output = out
+    return output

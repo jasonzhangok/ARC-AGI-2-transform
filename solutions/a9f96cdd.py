@@ -4,4 +4,5 @@ def transform(grid):
     for dr,dc,color in ((-1,-1,3),(-1,1,6),(1,-1,8),(1,1,7)):
         nr,nc=r+dr,c+dc
         if 0<=nr<h and 0<=nc<w: out[nr][nc]=color
-    return out
+    output = out
+    return output

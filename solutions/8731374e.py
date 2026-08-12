@@ -1,9 +1,10 @@
-from collections import Counter, deque
 
 
 def transform(grid):
     h, w = len(grid), len(grid[0])
-    counts = Counter(value for row in grid for value in row)
+    counts = {}
+    for cell_value in (value for row in grid for value in row):
+        counts[cell_value] = counts.get(cell_value, 0) + 1
     best = []
     seen = set()
     for r in range(h):
@@ -11,11 +12,11 @@ def transform(grid):
             color = grid[r][c]
             if (r, c) in seen:
                 continue
-            queue = deque([(r, c)])
+            queue = list([(r, c)])
             seen.add((r, c))
             component = []
             while queue:
-                x, y = queue.popleft()
+                x, y = queue.pop(0)
                 component.append((x, y))
                 for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
                     if 0 <= nx < h and 0 <= ny < w and (nx, ny) not in seen and grid[nx][ny] == color:

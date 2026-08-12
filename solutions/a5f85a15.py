@@ -6,4 +6,5 @@ def transform(grid):
         cells = [(r, r + d) for r in range(h) if 0 <= r + d < w and grid[r][r+d] == color]
         for i, (r, c) in enumerate(cells):
             if i % 2 == 1: out[r][c] = 4
-    return out
+    output = out
+    return output

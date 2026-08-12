@@ -6,4 +6,5 @@ def transform(grid):
             if grid[r+2][c+2]!=8:row.append(0)
             else:row.append(corners[(2 if r>=oh/2 else 0)+(1 if c>=ow/2 else 0)])
         out.append(row)
-    return out
+    output = out
+    return output

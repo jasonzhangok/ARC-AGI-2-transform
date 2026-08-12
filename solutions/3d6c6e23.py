@@ -1,19 +1,33 @@
-from collections import Counter
-
-
 def transform(grid):
-    height, width = len(grid), len(grid[0])
-    points = [(r, c, value) for r, row in enumerate(grid) for c, value in enumerate(row) if value != 0]
-    center = points[0][1]
-    counts = Counter(value for _, _, value in points)
-    levels = int(len(points) ** 0.5)
-    result = [[0 for _ in range(width)] for _ in range(height)]
-    remaining = counts.copy()
-    for level in range(levels):
-        span = 2 * level + 1
-        color = next(color for color, count in remaining.items() if count >= span)
-        row = height - levels + level
-        for c in range(center - level, center + level + 1):
-            result[row][c] = color
-        remaining[color] -= span
-    return result
+    height = len(grid)
+    width = len(grid[0])
+    output = [[0 for col in range(width)] for row in range(height)]
+
+    for center_col in range(width):
+        counts = {}
+        total = 0
+        for row in range(height):
+            color = grid[row][center_col]
+            if color != 0:
+                counts[color] = counts.get(color, 0) + 1
+                total += 1
+        if total == 0:
+            continue
+        levels = 1
+        while (levels + 1) * (levels + 1) <= total:
+            levels += 1
+        remaining = dict(counts)
+        for level in range(levels):
+            span = 2 * level + 1
+            chosen_color = 0
+            for color in remaining:
+                if remaining[color] >= span:
+                    chosen_color = color
+                    break
+            row = height - levels + level
+            for col in range(center_col - level, center_col + level + 1):
+                if 0 <= col < width:
+                    output[row][col] = chosen_color
+            remaining[chosen_color] -= span
+
+    return output

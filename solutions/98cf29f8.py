@@ -1,25 +1,23 @@
-from collections import Counter
-
-
-def largest_solid_rectangle(grid, color):
-    h, w = len(grid), len(grid[0])
-    best = (0, 0, 0, 0, 0)
-    for r0 in range(h):
-        for c0 in range(w):
-            if grid[r0][c0] != color:
-                continue
-            for r1 in range(r0, h):
-                for c1 in range(c0, w):
-                    area = (r1 - r0 + 1) * (c1 - c0 + 1)
-                    if area > best[0] and all(grid[r][c] == color for r in range(r0, r1 + 1) for c in range(c0, c1 + 1)):
-                        best = (area, r0, r1, c0, c1)
-    return best
-
-
 def transform(grid):
     h, w = len(grid), len(grid[0])
-    colors = [value for value in Counter(value for row in grid for value in row) if value != 0]
-    boxes = {color: largest_solid_rectangle(grid, color) for color in colors}
+    colors = []
+    for row in grid:
+        for value in row:
+            if value != 0 and value not in colors:
+                colors.append(value)
+    boxes = {}
+    for color in colors:
+        best = (0, 0, 0, 0, 0)
+        for r0 in range(h):
+            for c0 in range(w):
+                if grid[r0][c0] != color:
+                    continue
+                for r1 in range(r0, h):
+                    for c1 in range(c0, w):
+                        area = (r1 - r0 + 1) * (c1 - c0 + 1)
+                        if area > best[0] and all(grid[r][c] == color for r in range(r0, r1 + 1) for c in range(c0, c1 + 1)):
+                            best = (area, r0, r1, c0, c1)
+        boxes[color] = best
     anchor = next(color for color in colors if boxes[color][0] == sum(row.count(color) for row in grid))
     moving = next(color for color in colors if color != anchor)
     _, ar0, ar1, ac0, ac1 = boxes[anchor]

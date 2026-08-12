@@ -8,4 +8,5 @@ def transform(grid):
         while 0 <= x < h and 0 <= y < w:
             out[x][y] = color
             x += dr; y += dc
-    return out
+    output = out
+    return output

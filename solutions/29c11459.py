@@ -10,4 +10,5 @@ def transform(grid):
             result[r][middle] = 5
             for c in range(middle + 1, right + 1):
                 result[r][c] = right_color
-    return result
+    output = result
+    return output

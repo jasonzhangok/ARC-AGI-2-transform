@@ -17,4 +17,5 @@ def transform(grid):
                 nr,nc=r+dr,c+dc
                 if not(0<=nr<h and 0<=nc<w):break
             r,c=nr,nc;out[r][c]=1
-    return out
+    output = out
+    return output

@@ -8,4 +8,5 @@ def transform(grid):
     for y in range(min(r, vertical_edge), max(r, vertical_edge) + 1):
         for x in range(min(c, horizontal_edge), max(c, horizontal_edge) + 1):
             out[y][x] = color
-    return out
+    output = out
+    return output

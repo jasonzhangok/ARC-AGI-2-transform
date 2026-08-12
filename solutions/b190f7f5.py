@@ -1,24 +1,36 @@
 def transform(grid):
-    size = len(grid)
-    left = [row[:size] for row in grid]
-    right = [row[size:] for row in grid]
-
-    def is_mask(panel):
-        return all(value in (0, 8) for row in panel for value in row)
-
-    if is_mask(left):
-        mask, layout = left, right
+    height = len(grid)
+    width = len(grid[0])
+    if width == 2 * height:
+        size = height
+        first = [row[:size] for row in grid]
+        second = [row[size:] for row in grid]
     else:
-        mask, layout = right, left
+        size = width
+        first = [row[:] for row in grid[:size]]
+        second = [row[:] for row in grid[size:]]
 
-    output = [[0] * (size * size) for _ in range(size * size)]
+    first_is_mask = True
+    for row in first:
+        for value in row:
+            if value != 0 and value != 8:
+                first_is_mask = False
+    if first_is_mask:
+        mask = first
+        layout = second
+    else:
+        mask = second
+        layout = first
+
+    output = [[0 for column in range(size * size)]
+              for row in range(size * size)]
     for macro_row in range(size):
-        for macro_col in range(size):
-            color = layout[macro_row][macro_col]
+        for macro_column in range(size):
+            color = layout[macro_row][macro_column]
             if color == 0:
                 continue
             for row in range(size):
-                for col in range(size):
-                    if mask[row][col] == 8:
-                        output[macro_row * size + row][macro_col * size + col] = color
+                for column in range(size):
+                    if mask[row][column] == 8:
+                        output[macro_row * size + row][macro_column * size + column] = color
     return output

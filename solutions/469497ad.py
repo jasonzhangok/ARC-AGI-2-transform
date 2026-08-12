@@ -22,4 +22,5 @@ def transform(grid):
             y, x = r + dr * step, c + dc * step
             if 0 <= y < h * scale and 0 <= x < w * scale and out[y][x] == 0:
                 out[y][x] = 2
-    return out
+    output = out
+    return output

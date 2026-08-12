@@ -22,4 +22,5 @@ def transform(grid):
             else:
                 nr = 2 * r1 - r
         out[nr][nc] = 5
-    return out
+    output = out
+    return output

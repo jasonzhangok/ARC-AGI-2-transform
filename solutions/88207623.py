@@ -1,4 +1,3 @@
-from collections import Counter
 
 
 def transform(grid):
@@ -25,7 +24,10 @@ def transform(grid):
                           if grid[x][y] not in (0, 2, 4) and (y - c) * target_side > 0]
             if not source or not candidates:
                 continue
-            marker = Counter(candidates).most_common(1)[0][0]
+            marker = {}
+            for cell_value in (candidates):
+                marker[cell_value] = marker.get(cell_value, 0) + 1
+            marker = max(marker, key=marker.get)
             for x, y in source:
                 mirror = 2 * c - y
                 if 0 <= mirror < w:

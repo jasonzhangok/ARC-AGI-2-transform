@@ -1,50 +1,67 @@
-from collections import Counter
-
-
 def transform(grid):
-    height, width = len(grid), len(grid[0])
-    patterns = []
-    for color in {value for row in grid for value in row if value not in (0, 2)}:
-        seen = set()
+    height = len(grid)
+    width = len(grid[0])
+    colors = set()
+    for row in range(height):
+        for col in range(width):
+            if grid[row][col] != 0:
+                colors.add(grid[row][col])
+
+    pattern_counts = {}
+    pattern_colors = {}
+    for color in colors:
+        remaining = set()
         for row in range(height):
             for col in range(width):
-                if grid[row][col] != color or (row, col) in seen:
-                    continue
-                component = []
-                stack = [(row, col)]
-                seen.add((row, col))
-                while stack:
-                    current_row, current_col = stack.pop()
-                    component.append((current_row, current_col))
-                    for row_step in (-1, 0, 1):
-                        for col_step in (-1, 0, 1):
-                            next_row = current_row + row_step
-                            next_col = current_col + col_step
-                            next_cell = (next_row, next_col)
-                            if (
-                                0 <= next_row < height
-                                and 0 <= next_col < width
-                                and next_cell not in seen
-                                and grid[next_row][next_col] == color
-                            ):
-                                seen.add(next_cell)
-                                stack.append(next_cell)
+                if grid[row][col] == color:
+                    remaining.add((row, col))
+        while remaining:
+            start = remaining.pop()
+            component = {start}
+            stack = [start]
+            while stack:
+                row, col = stack.pop()
+                for row_offset in (-1, 0, 1):
+                    for col_offset in (-1, 0, 1):
+                        neighbor = (row + row_offset, col + col_offset)
+                        if neighbor in remaining:
+                            remaining.remove(neighbor)
+                            component.add(neighbor)
+                            stack.append(neighbor)
+            top = min(row for row, col in component)
+            bottom = max(row for row, col in component)
+            left = min(col for row, col in component)
+            right = max(col for row, col in component)
+            pattern_rows = []
+            for row in range(top, bottom + 1):
+                pattern_row = []
+                for col in range(left, right + 1):
+                    if (row, col) in component:
+                        pattern_row.append(1)
+                    else:
+                        pattern_row.append(0)
+                pattern_rows.append(tuple(pattern_row))
+            pattern = tuple(pattern_rows)
+            key = (color, pattern)
+            pattern_counts[key] = pattern_counts.get(key, 0) + 1
+            pattern_colors[key] = color
 
-                top = min(current_row for current_row, _ in component)
-                bottom = max(current_row for current_row, _ in component)
-                left = min(current_col for _, current_col in component)
-                right = max(current_col for _, current_col in component)
-                cells = set(component)
-                patterns.append(
-                    tuple(
-                        tuple(
-                            color if (current_row, current_col) in cells else 0
-                            for current_col in range(left, right + 1)
-                        )
-                        for current_row in range(top, bottom + 1)
-                    )
-                )
+    selected_key = None
+    selected_count = -1
+    for key in pattern_counts:
+        if pattern_counts[key] > selected_count:
+            selected_key = key
+            selected_count = pattern_counts[key]
+    selected_color = pattern_colors[selected_key]
+    selected_pattern = selected_key[1]
+    output = []
+    for pattern_row in selected_pattern:
+        output_row = []
+        for value in pattern_row:
+            if value == 1:
+                output_row.append(selected_color)
+            else:
+                output_row.append(0)
+        output.append(output_row)
 
-    counts = Counter(patterns)
-    selected = max(counts, key=counts.get)
-    return [list(row) for row in selected]
+    return output

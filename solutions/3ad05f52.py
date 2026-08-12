@@ -98,4 +98,5 @@ def transform(grid):
 
     for r, c in selected:
         result[r][c] = paint
-    return result
+    output = result
+    return output

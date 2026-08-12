@@ -1,8 +1,3 @@
-def _neighbors(row, col):
-    for row_step, col_step in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-        yield row + row_step, col + col_step
-
-
 def transform(grid):
     height, width = len(grid), len(grid[0])
     completed = [row[:] for row in grid]
@@ -16,7 +11,7 @@ def transform(grid):
                     continue
                 adjacent_colors = {
                     completed[neighbor_row][neighbor_col]
-                    for neighbor_row, neighbor_col in _neighbors(row, col)
+                    for neighbor_row, neighbor_col in ((row+1,col),(row-1,col),(row,col+1),(row,col-1))
                     if 0 <= neighbor_row < height and 0 <= neighbor_col < width
                     and completed[neighbor_row][neighbor_col] not in (0, 5)
                 }
@@ -36,7 +31,7 @@ def transform(grid):
             component = []
             for current_row, current_col in queue:
                 component.append((current_row, current_col))
-                for neighbor in _neighbors(current_row, current_col):
+                for neighbor in ((current_row+1,current_col),(current_row-1,current_col),(current_row,current_col+1),(current_row,current_col-1)):
                     if (0 <= neighbor[0] < height and 0 <= neighbor[1] < width
                             and neighbor not in seen
                             and completed[neighbor[0]][neighbor[1]] == color):
@@ -44,7 +39,7 @@ def transform(grid):
                         queue.append(neighbor)
             components.append(component)
 
-    components.sort(key=lambda component: min(col for _, col in component))
+    components = [record[2] for record in sorted((min(col for _, col in component), index, component) for index, component in enumerate(components))]
     output_width = sum(
         max(col for _, col in component) - min(col for _, col in component) + 1
         for component in components
@@ -61,11 +56,11 @@ def transform(grid):
         normalized = {(row - top, col - left) for row, col in component}
         endpoints = []
         for row, col in normalized:
-            degree = sum(neighbor in normalized for neighbor in _neighbors(row, col))
+            degree = sum(neighbor in normalized for neighbor in ((row+1,col),(row-1,col),(row,col+1),(row,col-1)))
             if degree <= 1:
                 endpoints.append((row, col))
-        left_endpoint = min(endpoints, key=lambda point: (point[1], point[0]))
-        right_endpoint = max(endpoints, key=lambda point: (point[1], -point[0]))
+        left_endpoint = min((point[1],point[0],point) for point in endpoints)[2]
+        right_endpoint = max((point[1],-point[0],point) for point in endpoints)[2]
         vertical_offset = (
             top if index == 0 else previous_exit_row - left_endpoint[0]
         )

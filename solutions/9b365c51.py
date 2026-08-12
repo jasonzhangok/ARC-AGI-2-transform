@@ -31,4 +31,5 @@ def transform(grid):
         for r in rows:
             for c in range(left, right + 1):
                 out[r][c] = color
-    return out
+    output = out
+    return output

@@ -1,6 +1,3 @@
-"""Arrange coloured components into a square frame."""
-
-
 def transform(grid):
     """Pack the coloured components, without rotating them, into a square frame."""
     height, width = len(grid), len(grid[0])
@@ -8,7 +5,10 @@ def transform(grid):
     for row in grid:
         for colour in row:
             counts[colour] = counts.get(colour, 0) + 1
-    background = max(counts, key=counts.get)
+    background = None
+    for colour in counts:
+        if background is None or counts[colour] > counts[background]:
+            background = colour
 
     seen = set()
     objects = []
@@ -59,25 +59,28 @@ def transform(grid):
                     placements.append((colour, placement))
         candidates.append(placements)
 
-    def place(remaining, occupied, result):
+    arrangement = None
+    stack = [(list(range(len(objects))), set(), [])]
+    while stack and arrangement is None:
+        remaining, occupied, partial = stack.pop()
         if not remaining:
-            return result if occupied == perimeter else None
-        object_index = min(
-            remaining,
-            key=lambda index: sum(not (cells & occupied) for _, cells in candidates[index]),
-        )
-        for colour, cells in candidates[object_index]:
-            if not cells & occupied:
-                arranged = place(
-                    [index for index in remaining if index != object_index],
-                    occupied | cells,
-                    result + [(colour, cells)],
-                )
-                if arranged is not None:
-                    return arranged
-        return None
-
-    arrangement = place(list(range(len(objects))), set(), [])
+            if occupied == perimeter:
+                arrangement = partial
+            continue
+        object_index = None
+        best_score = None
+        for index in remaining:
+            score = sum(not (cells & occupied) for _, cells in candidates[index])
+            if object_index is None or score < best_score:
+                object_index = index
+                best_score = score
+        options = [(colour, cells) for colour, cells in candidates[object_index] if not cells & occupied]
+        for colour, cells in reversed(options):
+            stack.append((
+                [index for index in remaining if index != object_index],
+                occupied | cells,
+                partial + [(colour, cells)],
+            ))
     if arrangement is None:
         raise ValueError("The components cannot form a complete square perimeter")
 

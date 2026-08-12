@@ -18,21 +18,15 @@ def transform(grid):
         forward = (0, -1)
     left = (-forward[1], forward[0])
 
-    def inside(point):
-        return 0 <= point[0] < height and 0 <= point[1] < width
-
-    def paint(point):
-        if inside(point) and grid[point[0]][point[1]] == 0:
-            result[point[0]][point[1]] = 2
-
     while True:
         ahead = (row + forward[0], col + forward[1])
-        if not inside(ahead):
+        if not (0 <= ahead[0] < height and 0 <= ahead[1] < width):
             break
         symbol = grid[ahead[0]][ahead[1]]
         if symbol not in (1, 3):
             row, col = ahead
-            paint(ahead)
+            if grid[ahead[0]][ahead[1]] == 0:
+                result[ahead[0]][ahead[1]] = 2
             continue
 
         # 1 means pass on the traveler's left; 3 means pass on the right.
@@ -40,7 +34,8 @@ def transform(grid):
         endpoint = ahead
         while True:
             following = (endpoint[0] + side[0], endpoint[1] + side[1])
-            if inside(following) and grid[following[0]][following[1]] == symbol:
+            if (0 <= following[0] < height and 0 <= following[1] < width
+                    and grid[following[0]][following[1]] == symbol):
                 endpoint = following
             else:
                 break
@@ -50,12 +45,15 @@ def transform(grid):
         while (row, col)[transverse_axis] != target[transverse_axis]:
             row += side[0]
             col += side[1]
-            paint((row, col))
+            if 0 <= row < height and 0 <= col < width and grid[row][col] == 0:
+                result[row][col] = 2
 
         # Pass beside the one-cell-thick bar and emerge just beyond it.
         for _ in range(2):
             row += forward[0]
             col += forward[1]
-            paint((row, col))
+            if 0 <= row < height and 0 <= col < width and grid[row][col] == 0:
+                result[row][col] = 2
 
-    return result
+    output = result
+    return output

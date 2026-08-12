@@ -13,4 +13,5 @@ def transform(grid):
             border={(x,y) for x in range(r0,r1+1) for y in range(c0,c1+1) if x in (r0,r1) or y in (c0,c1)}
             if set(q)==border and r1>r0+1 and c1>c0+1:
                 for x,y in q:out[x][y]=3
-    return out
+    output = out
+    return output

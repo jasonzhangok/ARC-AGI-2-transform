@@ -1,16 +1,17 @@
 def transform(grid):
     out = [row[:] for row in grid]
     h, w = len(grid), len(grid[0])
-    from collections import deque
     seen, boxes = set(), []
     for sr in range(h):
         for sc in range(w):
             if grid[sr][sc] != 3 or (sr, sc) in seen:
                 continue
-            q, comp = deque([(sr, sc)]), []
+            q, comp = [(sr, sc)], []
+            queue_index = 0
             seen.add((sr, sc))
-            while q:
-                r, c = q.popleft()
+            while queue_index < len(q):
+                r, c = q[queue_index]
+                queue_index += 1
                 comp.append((r, c))
                 for nr, nc in ((r-1,c),(r+1,c),(r,c-1),(r,c+1)):
                     if 0 <= nr < h and 0 <= nc < w and grid[nr][nc] == 3 and (nr,nc) not in seen:
@@ -27,4 +28,5 @@ def transform(grid):
             for y in range(max(0, c - 1), min(w, c + 2)):
                 if (x, y) not in centers:
                     out[x][y] = 1
-    return out
+    output = out
+    return output

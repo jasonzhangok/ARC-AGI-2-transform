@@ -5,4 +5,5 @@ def transform(grid):
     for r, row in enumerate(grid):
         if row[0] != 0:
             out[r][targets[row[0]]] = row[0]
-    return out
+    output = out
+    return output

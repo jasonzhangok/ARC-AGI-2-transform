@@ -11,4 +11,5 @@ def transform(grid):
                 for c in range(tile):
                     if (r, c) != (macro_r, macro_c):
                         out[top + r][left + c] = color
-    return out
+    output = out
+    return output

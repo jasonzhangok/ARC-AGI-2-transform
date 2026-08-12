@@ -1,6 +1,3 @@
-"""Orient two-cell coloured markers toward border guides."""
-
-
 def transform(grid):
     """Put colour 6 on the end of each 1/6 domino nearest its border 7."""
     height = len(grid)

@@ -1,6 +1,3 @@
-from collections import Counter
-
-
 def transform(grid):
     height, width = len(grid), len(grid[0])
     output = [row[:] for row in grid]
@@ -12,21 +9,19 @@ def transform(grid):
     ]
     counts = []
     for rows, cols in blocks:
-        counts.append(
-            Counter(
-                grid[row][col]
-                for row in rows
-                for col in cols
-                if grid[row][col] != 7
-            )
-        )
+        count = {}
+        for row in rows:
+            for col in cols:
+                if grid[row][col] != 7:
+                    count[grid[row][col]] = count.get(grid[row][col], 0) + 1
+        counts.append(count)
 
     colors = set().union(*counts)
-    target = {color: max(count[color] for count in counts) for color in colors}
+    target = {color: max(count.get(color, 0) for count in counts) for color in colors}
     for (rows, cols), count in zip(blocks, counts):
         missing = []
         for color, amount in target.items():
-            missing.extend([color] * (amount - count[color]))
+            missing.extend([color] * (amount - count.get(color, 0)))
         holes = [
             (row, col)
             for row in rows

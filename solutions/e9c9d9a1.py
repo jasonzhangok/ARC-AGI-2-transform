@@ -19,4 +19,5 @@ def transform(grid):
                 out[r][c] = 8
             elif 0 < ri < len(rows) and 0 < ci < len(cols):
                 out[r][c] = 7
-    return out
+    output = out
+    return output

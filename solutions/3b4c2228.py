@@ -8,4 +8,5 @@ def transform(grid):
     result = [[0, 0, 0] for _ in range(3)]
     for index in range(min(count, 3)):
         result[index][index] = 1
-    return result
+    output = result
+    return output

@@ -10,4 +10,5 @@ def transform(grid):
             c = diagonal - r
             if 0 <= c < size:
                 out[r][c] = color
-    return out
+    output = out
+    return output

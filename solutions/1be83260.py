@@ -1,13 +1,19 @@
-from collections import Counter
-
-
 def transform(grid):
     height, width = len(grid), len(grid[0])
-    base = Counter(value for row in grid for value in row if value != 0).most_common(1)[0][0]
+    counts = {}
+    for row in grid:
+        for value in row:
+            if value != 0:
+                counts[value] = counts.get(value, 0) + 1
+    base = None
+    for value in counts:
+        if base is None or counts[value] > counts[base]:
+            base = value
     active_rows = [r for r in range(height) if any(grid[r][c] != 0 for c in range(width))]
     active_cols = [c for c in range(width) if any(grid[r][c] != 0 for r in range(height))]
 
-    def intervals(indices):
+    bands = []
+    for indices in (active_rows, active_cols):
         result = []
         start = previous = indices[0]
         for value in indices[1:]:
@@ -16,10 +22,8 @@ def transform(grid):
                 start = value
             previous = value
         result.append((start, previous + 1))
-        return result
-
-    row_bands = intervals(active_rows)
-    col_bands = intervals(active_cols)
+        bands.append(result)
+    row_bands, col_bands = bands
     tile_height = row_bands[0][1] - row_bands[0][0]
     tile_width = col_bands[0][1] - col_bands[0][0]
     instruction = next(

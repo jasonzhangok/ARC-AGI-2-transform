@@ -8,4 +8,5 @@ def transform(grid):
     for row in source:
         values = [color if v else 0 for v in row]
         top.append(values + values[::-1])
-    return top + [row[:] for row in top[::-1]]
+    output = top + [row[:] for row in top[::-1]]
+    return output

@@ -10,5 +10,6 @@ def transform(grid):
         if score > best_score:
             best_score = score
             best_row, best_col = row, col
-    return [grid[best_row][best_col:best_col + 2],
+    output = [grid[best_row][best_col:best_col + 2],
             grid[best_row + 1][best_col:best_col + 2]]
+    return output

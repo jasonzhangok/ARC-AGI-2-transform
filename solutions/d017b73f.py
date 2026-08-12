@@ -25,30 +25,29 @@ def transform(grid):
         }
         pieces.append((len(columns), cells))
 
-    def endpoint_row(cells, side_column):
-        candidates = []
-        positions = set(cells)
-        for row, column in positions:
-            if column != side_column:
-                continue
-            degree = sum(
-                (row + dr, column + dc) in positions
-                for dr, dc in ((-1, 0), (1, 0), (0, -1), (0, 1))
-            )
-            if degree <= 1:
-                candidates.append(row)
-        if len(candidates) != 1:
-            raise ValueError("Each piece must have one path endpoint on each side")
-        return candidates[0]
-
     output_width = sum(piece_width for piece_width, _ in pieces)
     output = [[0] * output_width for _ in range(height)]
     output_column = 0
     previous_right_row = None
 
     for piece_width, cells in pieces:
-        left_row = endpoint_row(cells, 0)
-        right_row = endpoint_row(cells, piece_width - 1)
+        endpoint_rows = []
+        for side_column in (0, piece_width - 1):
+            candidates = []
+            positions = set(cells)
+            for candidate_row, candidate_column in positions:
+                if candidate_column != side_column:
+                    continue
+                degree = sum(
+                    (candidate_row + dr, candidate_column + dc) in positions
+                    for dr, dc in ((-1, 0), (1, 0), (0, -1), (0, 1))
+                )
+                if degree <= 1:
+                    candidates.append(candidate_row)
+            if len(candidates) != 1:
+                raise ValueError("Each piece must have one path endpoint on each side")
+            endpoint_rows.append(candidates[0])
+        left_row, right_row = endpoint_rows
         row_shift = 0 if previous_right_row is None else previous_right_row - left_row
 
         for (row, column), color in cells.items():

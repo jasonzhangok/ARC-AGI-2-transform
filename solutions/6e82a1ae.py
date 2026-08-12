@@ -11,4 +11,5 @@ def transform(grid):
                     if 0<=q[0]<h and 0<=q[1]<w and q not in seen and grid[q[0]][q[1]]==5:seen.add(q);st.append(q)
             color=5-len(cells)
             for x,y in cells:out[x][y]=color
-    return out
+    output = out
+    return output

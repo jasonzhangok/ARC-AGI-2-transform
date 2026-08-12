@@ -149,4 +149,5 @@ def transform(grid):
 
     for i, j, value in final_fills:
         result[i][j] = value
-    return result
+    output = result
+    return output

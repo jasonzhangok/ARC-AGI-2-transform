@@ -1,6 +1,3 @@
-from collections import Counter
-
-
 def transform(grid):
     height = len(grid)
     width = len(grid[0])
@@ -33,18 +30,12 @@ def transform(grid):
     right = max(col for _, col in source_cells)
     source = [grid[row][left:right + 1] for row in range(top, bottom + 1)]
 
-    row_counts = Counter(
-        row
-        for row in range(height)
-        for col in range(stencil_left, stencil_right + 1)
-        if grid[row][col] == 4
-    )
-    col_counts = Counter(
-        col - stencil_left
-        for row in range(height)
-        for col in range(stencil_left, stencil_right + 1)
-        if grid[row][col] == 4
-    )
+    row_counts = {}; col_counts = {}
+    for row in range(height):
+        for col in range(stencil_left, stencil_right + 1):
+            if grid[row][col] == 4:
+                row_counts[row]=row_counts.get(row,0)+1
+                relative=col-stencil_left;col_counts[relative]=col_counts.get(relative,0)+1
     row_separators = sorted(
         row for row, count in row_counts.items() if count == max(row_counts.values())
     )
@@ -52,7 +43,8 @@ def transform(grid):
         col for col, count in col_counts.items() if count == max(col_counts.values())
     )
 
-    def expanded_indices(separators, total):
+    expanded = []
+    for separators,total in ((row_separators,height),(col_separators,stencil_right-stencil_left+1)):
         indices = []
         previous = 0
         for group, separator in enumerate(separators):
@@ -60,13 +52,10 @@ def transform(grid):
             indices.append(2 * group + 1)
             previous = separator + 1
         indices.extend([2 * len(separators)] * (total - previous))
-        return indices
-
-    row_indices = expanded_indices(row_separators, height)
-    col_indices = expanded_indices(
-        col_separators, stencil_right - stencil_left + 1
-    )
-    return [
+        expanded.append(indices)
+    row_indices,col_indices=expanded
+    output = [
         [source[source_row][source_col] for source_col in col_indices]
         for source_row in row_indices
     ]
+    return output

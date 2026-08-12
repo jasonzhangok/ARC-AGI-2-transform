@@ -44,4 +44,5 @@ def transform(grid):
                     nc = target_column + horizontal_sign * (c - marker_column)
                     if 0 <= nr < height and 0 <= nc < width:
                         result[nr][nc] = grid[r][c]
-    return result
+    output = result
+    return output

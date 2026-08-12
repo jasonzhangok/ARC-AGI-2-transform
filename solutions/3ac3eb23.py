@@ -9,4 +9,5 @@ def transform(grid):
                 c = column + offset
                 if 0 <= c < width:
                     result[r][c] = color
-    return result
+    output = result
+    return output

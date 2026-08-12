@@ -1,8 +1,8 @@
-def _components(grid, skip):
-    h, w = len(grid), len(grid[0]); seen = set(); result = []
+def transform(grid):
+    h, w = len(grid), len(grid[0]); seen = set(); comps = []
     for r in range(h):
         for c in range(w):
-            if grid[r][c] in skip or (r, c) in seen: continue
+            if grid[r][c] == 0 or (r, c) in seen: continue
             color = grid[r][c]; stack = [(r, c)]; seen.add((r, c)); cells = []
             while stack:
                 x, y = stack.pop(); cells.append((x, y))
@@ -12,18 +12,17 @@ def _components(grid, skip):
                         p=x+dx,y+dy
                         if 0<=p[0]<h and 0<=p[1]<w and p not in seen and grid[p[0]][p[1]]==color:
                             seen.add(p);stack.append(p)
-            result.append((color,cells))
-    return result
-
-
-def transform(grid):
-    comps = _components(grid, {0})
-    palette = max(comps, key=lambda x: len(x[1]))[1]
+            comps.append((color,cells))
+    palette = max((len(item[1]),-index,item[1]) for index,item in enumerate(comps))[2]
     r0,r1=min(r for r,c in palette),max(r for r,c in palette)
     c0,c1=min(c for r,c in palette),max(c for r,c in palette)
     # The solid palette color is the color covering most of its bounding box.
-    from collections import Counter
-    base=Counter(grid[r][c] for r in range(r0,r1+1) for c in range(c0,c1+1)).most_common(1)[0][0]
+    counts={}
+    for r in range(r0,r1+1):
+        for c in range(c0,c1+1):counts[grid[r][c]]=counts.get(grid[r][c],0)+1
+    base=None
+    for value in counts:
+        if base is None or counts[value]>counts[base]:base=value
     markers={(0 if r-r0 < (r1-r0+1)/2 else 1,0 if c-c0 < (c1-c0+1)/2 else 1):grid[r][c]
              for r in range(r0,r1+1) for c in range(c0,c1+1) if grid[r][c] not in (0,base)}
     shapes={}
@@ -40,4 +39,5 @@ def transform(grid):
         ro,co=pos[0]*4,pos[1]*4
         for r in range(3):
             for c in range(3):out[ro+r][co+c]=shapes[color][r][c]
-    return out
+    output=out
+    return output

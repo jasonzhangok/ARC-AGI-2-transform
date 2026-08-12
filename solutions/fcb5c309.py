@@ -26,5 +26,6 @@ def transform(grid):
                         if value not in (0, frame_color))
     r0, r1 = min(r for r, _ in frame), max(r for r, _ in frame)
     c0, c1 = min(c for _, c in frame), max(c for _, c in frame)
-    return [[output_color if grid[r][c] == frame_color else grid[r][c]
+    output = [[output_color if grid[r][c] == frame_color else grid[r][c]
              for c in range(c0, c1 + 1)] for r in range(r0, r1 + 1)]
+    return output

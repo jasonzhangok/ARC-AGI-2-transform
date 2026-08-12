@@ -10,4 +10,5 @@ def transform(grid):
             for y in range(max(0, r0), min(2 * h, r0 + 4)):
                 for x in range(max(0, c0), min(2 * w, c0 + 4)):
                     out[y][x] = color
-    return out
+    output = out
+    return output

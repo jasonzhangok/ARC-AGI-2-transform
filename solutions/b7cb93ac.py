@@ -1,74 +1,90 @@
-def _normalize(cells):
-    min_row = min(row for row, _ in cells)
-    min_col = min(col for _, col in cells)
-    return frozenset((row - min_row, col - min_col) for row, col in cells)
-
-
-def _variants(cells):
-    """Return distinct rotations/reflections, preferring the original pose."""
-    result = []
-    current = set(cells)
-    for _ in range(4):
-        for pose in (current, {(row, -col) for row, col in current}):
-            normalized = _normalize(pose)
-            if normalized not in result:
-                result.append(normalized)
-        current = {(col, -row) for row, col in current}
-    return result
-
-
 def transform(grid):
     height = len(grid)
     width = len(grid[0])
     seen = set()
     pieces = []
-
     for row in range(height):
-        for col in range(width):
-            if grid[row][col] == 0 or (row, col) in seen:
+        for column in range(width):
+            if grid[row][column] == 0 or (row, column) in seen:
                 continue
-            color = grid[row][col]
-            stack = [(row, col)]
-            seen.add((row, col))
-            component = []
-            while stack:
-                cur_row, cur_col = stack.pop()
-                component.append((cur_row, cur_col))
-                for d_row, d_col in ((-1, 0), (1, 0), (0, -1), (0, 1)):
-                    next_row = cur_row + d_row
-                    next_col = cur_col + d_col
-                    if (0 <= next_row < height and 0 <= next_col < width
-                            and (next_row, next_col) not in seen
-                            and grid[next_row][next_col] == color):
-                        seen.add((next_row, next_col))
-                        stack.append((next_row, next_col))
+            color = grid[row][column]
+            cells = [(row, column)]
+            seen.add((row, column))
+            cursor = 0
+            while cursor < len(cells):
+                current_row, current_column = cells[cursor]
+                cursor += 1
+                for next_row, next_column in ((current_row - 1, current_column),
+                                                (current_row + 1, current_column),
+                                                (current_row, current_column - 1),
+                                                (current_row, current_column + 1)):
+                    if (0 <= next_row < height and 0 <= next_column < width
+                            and grid[next_row][next_column] == color
+                            and (next_row, next_column) not in seen):
+                        seen.add((next_row, next_column))
+                        cells.append((next_row, next_column))
+            minimum_row = min(cell_row for cell_row, cell_column in cells)
+            minimum_column = min(cell_column for cell_row, cell_column in cells)
+            normalized = set((cell_row - minimum_row, cell_column - minimum_column)
+                             for cell_row, cell_column in cells)
+            pieces.append((color, normalized, minimum_row, minimum_column))
 
-            top_left = min(component)
-            pieces.append((color, _normalize(component), top_left))
+    for index in range(1, len(pieces)):
+        piece = pieces[index]
+        position = index
+        while position > 0:
+            previous = pieces[position - 1]
+            piece_precedes = (len(piece[1]) > len(previous[1])
+                              or (len(piece[1]) == len(previous[1])
+                                  and (piece[2], piece[3]) > (previous[2], previous[3])))
+            if not piece_precedes:
+                break
+            pieces[position] = previous
+            position -= 1
+        pieces[position] = piece
 
-    pieces.sort(key=lambda item: (-len(item[1]), item[2]))
-    canvas = [[0] * 4 for _ in range(3)]
-
-    def place(piece_index):
-        if piece_index == len(pieces):
-            return all(value != 0 for line in canvas for value in line)
-
-        color, cells, _ = pieces[piece_index]
-        for pose in _variants(cells):
-            pose_height = max(row for row, _ in pose) + 1
-            pose_width = max(col for _, col in pose) + 1
+    piece_options = []
+    for color, cells, source_row, source_column in pieces:
+        variants = []
+        current = set(cells)
+        for rotation in range(4):
+            poses = [current, set((cell_row, -cell_column)
+                                  for cell_row, cell_column in current)]
+            for pose in poses:
+                minimum_row = min(cell_row for cell_row, cell_column in pose)
+                minimum_column = min(cell_column for cell_row, cell_column in pose)
+                normalized = frozenset((cell_row - minimum_row, cell_column - minimum_column)
+                                       for cell_row, cell_column in pose)
+                if normalized not in variants:
+                    variants.append(normalized)
+            current = set((cell_column, -cell_row) for cell_row, cell_column in current)
+        options = []
+        for pose in variants:
+            pose_height = max(cell_row for cell_row, cell_column in pose) + 1
+            pose_width = max(cell_column for cell_row, cell_column in pose) + 1
             for top in range(4 - pose_height):
                 for left in range(5 - pose_width):
-                    target = [(top + row, left + col) for row, col in pose]
-                    if all(canvas[row][col] == 0 for row, col in target):
-                        for row, col in target:
-                            canvas[row][col] = color
-                        if place(piece_index + 1):
-                            return True
-                        for row, col in target:
-                            canvas[row][col] = 0
-        return False
+                    options.append((color, [(top + cell_row, left + cell_column)
+                                            for cell_row, cell_column in pose]))
+        piece_options.append(options)
 
-    if not place(0):
-        return []
-    return canvas
+    blank = [[0 for column in range(4)] for row in range(3)]
+    states = [(0, blank)]
+    output = []
+    while states:
+        piece_index, canvas = states.pop()
+        if piece_index == len(piece_options):
+            if all(canvas[row][column] != 0 for row in range(3) for column in range(4)):
+                output = canvas
+                break
+            continue
+        next_states = []
+        for color, target in piece_options[piece_index]:
+            if all(canvas[row][column] == 0 for row, column in target):
+                next_canvas = [row[:] for row in canvas]
+                for row, column in target:
+                    next_canvas[row][column] = color
+                next_states.append((piece_index + 1, next_canvas))
+        for state in reversed(next_states):
+            states.append(state)
+    return output

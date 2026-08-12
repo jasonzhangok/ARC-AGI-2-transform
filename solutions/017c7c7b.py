@@ -4,7 +4,8 @@ def transform(grid):
         for size in range(1, len(grid) + 1)
         if all(grid[r] == grid[r % size] for r in range(len(grid)))
     )
-    return [
+    output = [
         [2 if value == 1 else value for value in grid[r % period]]
         for r in range(9)
     ]
+    return output

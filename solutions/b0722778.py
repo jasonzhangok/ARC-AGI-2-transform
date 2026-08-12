@@ -1,23 +1,4 @@
 def transform(grid):
-    def color_mapping(source, target):
-        forward = {}
-        reverse = {}
-        for source_row, target_row in zip(source, target):
-            for source_color, target_color in zip(source_row, target_row):
-                if (
-                    source_color in forward
-                    and forward[source_color] != target_color
-                ):
-                    return None
-                if (
-                    target_color in reverse
-                    and reverse[target_color] != source_color
-                ):
-                    return None
-                forward[source_color] = target_color
-                reverse[target_color] = source_color
-        return forward
-
     output = []
     row = 0
     while row < len(grid):
@@ -50,11 +31,24 @@ def transform(grid):
         )
         target = 3 - first - second
 
-        mapping = color_mapping(panels[first], panels[target])
+        mappings = []
+        for source in (panels[first], panels[second]):
+            forward = {}
+            reverse = {}
+            valid = True
+            for source_row, target_row in zip(source, panels[target]):
+                for source_color, target_color in zip(source_row, target_row):
+                    if (source_color in forward and forward[source_color] != target_color
+                            or target_color in reverse and reverse[target_color] != source_color):
+                        valid = False
+                    forward[source_color] = target_color
+                    reverse[target_color] = source_color
+            mappings.append(forward if valid else None)
+        mapping = mappings[0]
         if mapping is not None:
             pattern = panels[second]
         else:
-            mapping = color_mapping(panels[second], panels[target])
+            mapping = mappings[1]
             pattern = panels[first]
 
         output.extend(

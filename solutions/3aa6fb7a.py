@@ -8,4 +8,5 @@ def transform(grid):
                 for x, y in cells:
                     if grid[x][y] == 0:
                         result[x][y] = 1
-    return result
+    output = result
+    return output

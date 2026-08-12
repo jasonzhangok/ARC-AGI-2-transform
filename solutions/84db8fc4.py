@@ -11,4 +11,5 @@ def transform(grid):
                     if 0<=p[0]<h and 0<=p[1]<w and p not in seen and grid[p[0]][p[1]]==0:seen.add(p);st.append(p)
             color=2 if any(x in (0,h-1) or y in (0,w-1) for x,y in q) else 5
             for x,y in q:out[x][y]=color
-    return out
+    output = out
+    return output

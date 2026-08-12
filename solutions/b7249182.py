@@ -1,21 +1,15 @@
 def transform(grid):
     height = len(grid)
     width = len(grid[0])
-    seeds = [
-        (row, col, grid[row][col])
-        for row in range(height)
-        for col in range(width)
-        if grid[row][col] != 0
-    ]
+    seeds = [(row, col, grid[row][col]) for row in range(height) for col in range(width) if grid[row][col] != 0]
     output = [row[:] for row in grid]
-
     if seeds[0][0] == seeds[1][0]:
-        left_seed, right_seed = sorted(seeds, key=lambda item: item[1])
+        left_seed, right_seed = [_sort_record_1[2] for _sort_record_1 in sorted(((_sort_item_1[1], _sort_index_1, _sort_item_1) for _sort_index_1, _sort_item_1 in enumerate(seeds)))]
         row, left_col, left_color = left_seed
         _, right_col, right_color = right_seed
         inner_left = (left_col + right_col) // 2 - 1
         inner_right = (left_col + right_col + 1) // 2 + 1
-        top, bottom = row - 2, row + 2
+        top, bottom = (row - 2, row + 2)
         for col in range(left_col, inner_left + 1):
             output[row][col] = left_color
         for col in range(inner_right, right_col + 1):
@@ -28,12 +22,12 @@ def transform(grid):
             output[current_row][inner_left] = left_color
             output[current_row][inner_right] = right_color
     else:
-        top_seed, bottom_seed = sorted(seeds, key=lambda item: item[0])
+        top_seed, bottom_seed = [_sort_record_2[2] for _sort_record_2 in sorted(((_sort_item_2[0], _sort_index_2, _sort_item_2) for _sort_index_2, _sort_item_2 in enumerate(seeds)))]
         top_row, col, top_color = top_seed
         bottom_row, _, bottom_color = bottom_seed
         inner_top = (top_row + bottom_row) // 2 - 1
         inner_bottom = (top_row + bottom_row + 1) // 2 + 1
-        left, right = col - 2, col + 2
+        left, right = (col - 2, col + 2)
         for row in range(top_row, inner_top + 1):
             output[row][col] = top_color
         for row in range(inner_bottom, bottom_row + 1):

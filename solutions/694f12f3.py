@@ -15,4 +15,5 @@ def transform(grid):
     for i,(_,r0,r1,c0,c1) in enumerate(rects):
         for r in range(r0+1,r1):
             for c in range(c0+1,c1): out[r][c]=2 if i==0 else 1
-    return out
+    output = out
+    return output

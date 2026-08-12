@@ -1,5 +1,5 @@
 def transform(grid):
-    height, width = len(grid), len(grid[0])
+    height, width = (len(grid), len(grid[0]))
     ones = {(r, c) for r in range(height) for c in range(width) if grid[r][c] == 1}
     candidates = []
     for twice_row in range(2 * height - 1):
@@ -19,7 +19,7 @@ def transform(grid):
                 rotated.add(point)
             if valid and rotated - ones:
                 candidates.append((len(rotated & ones), rotated))
-    _, rotated = max(candidates, key=lambda item: item[0])
+    _, rotated = max(((_key_item_1[0], -_key_index_1, _key_item_1) for _key_index_1, _key_item_1 in enumerate(candidates)))[2]
     output = [row[:] for row in grid]
     for row, col in rotated - ones:
         output[row][col] = 2

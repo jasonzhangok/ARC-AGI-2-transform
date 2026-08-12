@@ -1,12 +1,17 @@
-def _components(grid):
+def transform(grid):
     height, width = len(grid), len(grid[0])
+    output = [[0] * width for _ in range(height)]
+    objects = []
+
+    _grid = grid
+    height, width = len(_grid), len(_grid[0])
     seen = set()
     result = []
     for r in range(height):
         for c in range(width):
-            if grid[r][c] == 0 or (r, c) in seen:
+            if _grid[r][c] == 0 or (r, c) in seen:
                 continue
-            color = grid[r][c]
+            color = _grid[r][c]
             stack = [(r, c)]
             seen.add((r, c))
             points = []
@@ -19,20 +24,13 @@ def _components(grid):
                         0 <= yy < height
                         and 0 <= xx < width
                         and (yy, xx) not in seen
-                        and grid[yy][xx] == color
+                        and _grid[yy][xx] == color
                     ):
                         seen.add((yy, xx))
                         stack.append((yy, xx))
             result.append((color, points))
-    return result
-
-
-def transform(grid):
-    height, width = len(grid), len(grid[0])
-    output = [[0] * width for _ in range(height)]
-    objects = []
-
-    for color, points in _components(grid):
+    _components_result_1 = result
+    for color, points in _components_result_1:
         top = min(r for r, _ in points)
         bottom = max(r for r, _ in points)
         left = min(c for _, c in points)

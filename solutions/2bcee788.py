@@ -1,18 +1,12 @@
-from collections import Counter
-
-
 def transform(grid):
-    height, width = len(grid), len(grid[0])
-    counts = Counter(value for row in grid for value in row if value not in (0, 2))
-    main = counts.most_common(1)[0][0]
+    height, width = (len(grid), len(grid[0]))
+    counts = {}
+    for cell_value in (value for row in grid for value in row if value not in (0, 2)):
+        counts[cell_value] = counts.get(cell_value, 0) + 1
+    main = max(counts, key=counts.get)
     main_cells = {(r, c) for r in range(height) for c in range(width) if grid[r][c] == main}
     marker_cells = {(r, c) for r in range(height) for c in range(width) if grid[r][c] == 2}
-    adjacent = [
-        (mr, mc, rr, cc)
-        for mr, mc in marker_cells
-        for rr, cc in main_cells
-        if abs(mr - rr) + abs(mc - cc) == 1
-    ]
+    adjacent = [(mr, mc, rr, cc) for mr, mc in marker_cells for rr, cc in main_cells if abs(mr - rr) + abs(mc - cc) == 1]
     mr, mc, rr, cc = adjacent[0]
     horizontal_axis = mr != rr
     doubled_axis = mr + rr if horizontal_axis else mc + cc
@@ -23,4 +17,5 @@ def transform(grid):
             result[doubled_axis - r][c] = main
         else:
             result[r][doubled_axis - c] = main
-    return result
+    output = result
+    return output

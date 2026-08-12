@@ -10,4 +10,5 @@ def transform(grid):
                     occupied.update(square)
     for r, c in occupied:
         result[r][c] = 1
-    return result
+    output = result
+    return output

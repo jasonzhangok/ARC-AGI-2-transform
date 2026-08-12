@@ -18,4 +18,5 @@ def transform(grid):
             for c in range(width):
                 if not (column - 2 <= c <= column + 2):
                     result[row + 2][c] = 2
-    return result
+    output = result
+    return output

@@ -5,4 +5,5 @@ def transform(grid):
         for bc in range(3):
             row.append(next(grid[r][c] for r in range(br*bh,(br+1)*bh) for c in range(bc*bw,(bc+1)*bw) if grid[r][c]!=0))
         out.append(row)
-    return out
+    output = out
+    return output

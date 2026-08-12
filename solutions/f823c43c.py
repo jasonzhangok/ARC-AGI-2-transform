@@ -26,4 +26,5 @@ def transform(grid):
                       for c in range(cc, w, pc)
                       if grid[r][c] != 6]
             template[rr][cc] = values[0]
-    return [[template[r % pr][c % pc] for c in range(w)] for r in range(h)]
+    output = [[template[r % pr][c % pc] for c in range(w)] for r in range(h)]
+    return output

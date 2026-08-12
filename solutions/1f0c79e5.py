@@ -44,7 +44,8 @@ def transform(grid):
                 target = row + repetition * row_step, col + repetition * col_step
                 if 0 <= target[0] < height and 0 <= target[1] < width:
                     painted.add(target)
-    return [
+    output = [
         [drawing_color if (row, col) in painted else 0 for col in range(width)]
         for row in range(height)
     ]
+    return output

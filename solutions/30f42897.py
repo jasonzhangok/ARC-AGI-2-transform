@@ -14,4 +14,5 @@ def transform(grid):
     for index, (r, c) in enumerate(border):
         if (index - start) % (2 * period_length) < period_length:
             result[r][c] = marker
-    return result
+    output = result
+    return output

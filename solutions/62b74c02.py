@@ -6,4 +6,5 @@ def transform(grid):
         seed = row[:n]
         middle = [seed[-1]] * (w - len(seed) - len(seed) + 1)
         out.append(seed + middle + seed[1:])
-    return out
+    output = out
+    return output

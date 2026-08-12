@@ -27,4 +27,5 @@ def transform(grid):
         if sum(grid[r][c]==3 for r in range(h)) > h//2:
             for r in range(h):
                 out[r][c]=3
-    return out
+    output = out
+    return output

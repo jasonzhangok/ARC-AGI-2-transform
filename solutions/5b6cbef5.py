@@ -5,4 +5,5 @@ def transform(grid):
             if grid[br][bc]==0:continue
             for r in range(n):
                 for c in range(n):out[br*n+r][bc*n+c]=grid[r][c]
-    return out
+    output = out
+    return output

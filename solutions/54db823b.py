@@ -1,9 +1,8 @@
 def transform(grid):
-    height, width = len(grid), len(grid[0])
+    height, width = (len(grid), len(grid[0]))
     output = [row[:] for row in grid]
     seen = set()
     components = []
-
     for start_row in range(height):
         for start_col in range(width):
             if grid[start_row][start_col] == 0 or (start_row, start_col) in seen:
@@ -14,21 +13,12 @@ def transform(grid):
             for row, col in queue:
                 component.append((row, col))
                 for drow, dcol in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                    next_row, next_col = row + drow, col + dcol
-                    if (
-                        0 <= next_row < height
-                        and 0 <= next_col < width
-                        and grid[next_row][next_col] != 0
-                        and (next_row, next_col) not in seen
-                    ):
+                    next_row, next_col = (row + drow, col + dcol)
+                    if 0 <= next_row < height and 0 <= next_col < width and (grid[next_row][next_col] != 0) and ((next_row, next_col) not in seen):
                         seen.add((next_row, next_col))
                         queue.append((next_row, next_col))
             components.append(component)
-
-    least_marked = min(
-        components,
-        key=lambda component: sum(grid[row][col] == 9 for row, col in component),
-    )
+    least_marked = min(((sum((grid[row][col] == 9 for row, col in _key_item_1)), _key_index_1, _key_item_1) for _key_index_1, _key_item_1 in enumerate(components)))[2]
     for row, col in least_marked:
         output[row][col] = 0
     return output

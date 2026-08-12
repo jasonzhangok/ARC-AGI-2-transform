@@ -1,2 +1,3 @@
 def transform(grid):
-    return [row + row[::-1] + row + row[::-1] + row for row in grid]
+    output = [row + row[::-1] + row + row[::-1] + row for row in grid]
+    return output

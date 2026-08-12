@@ -10,4 +10,5 @@ def transform(grid):
     out = [[0] * w for _ in range(h)]
     for r, c in marks: out[r][c] = 3
     for r, c in red: out[r + dr][c + dc] = 2
-    return out
+    output = out
+    return output

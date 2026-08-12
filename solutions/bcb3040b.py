@@ -16,4 +16,5 @@ def transform(grid):
         row = start_row + offset * row_step
         col = start_col + offset * col_step
         result[row][col] = 3 if grid[row][col] == 1 else 2
-    return result
+    output = result
+    return output

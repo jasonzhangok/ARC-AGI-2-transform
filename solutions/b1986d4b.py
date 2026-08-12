@@ -88,4 +88,5 @@ def transform(grid):
                 result[row].extend([background] * group_side)
             result[row].append(background)
 
-    return result
+    output = result
+    return output

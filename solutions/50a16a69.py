@@ -9,4 +9,5 @@ def transform(grid):
               if all(sample[r][c] == sample[r % p][c] for r in range(sh) for c in range(sw)))
     pc = next(p for p in range(1, sw + 1)
               if all(sample[r][c] == sample[r][c % p] for r in range(sh) for c in range(sw)))
-    return [[sample[r % pr][(c + 1) % pc] for c in range(w)] for r in range(h)]
+    output = [[sample[r % pr][(c + 1) % pc] for c in range(w)] for r in range(h)]
+    return output

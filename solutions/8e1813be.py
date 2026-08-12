@@ -8,9 +8,13 @@ def transform(grid):
                  for color in unique}
     vertical = all(max(r for r, _ in cells) - min(r for r, _ in cells) >=
                    max(c for _, c in cells) - min(c for _, c in cells) for cells in positions.values())
-    key = (lambda color: min(c for _, c in positions[color])) if vertical else (lambda color: min(r for r, _ in positions[color]))
-    ordered = sorted(unique, key=key)
+    if vertical:
+        ordered = [item[2] for item in sorted((min(c for _, c in positions[color]), index, color) for index, color in enumerate(unique))]
+    else:
+        ordered = [item[2] for item in sorted((min(r for r, _ in positions[color]), index, color) for index, color in enumerate(unique))]
     n = len(ordered)
     if vertical:
-        return [ordered[:] for _ in range(n)]
-    return [[color] * n for color in ordered]
+        output = [ordered[:] for _ in range(n)]
+    else:
+        output = [[color] * n for color in ordered]
+    return output

@@ -86,4 +86,5 @@ def transform(grid):
         result[r][source_left - 1] = vertical_border
         result[r][target_right + 1] = vertical_border
 
-    return result
+    output = result
+    return output

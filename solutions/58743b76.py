@@ -40,4 +40,5 @@ def transform(grid):
                 quadrant_col = 0 if 2 * (col - col_start) < col_end - col_start else 1
                 result[row][col] = grid[key_row + quadrant_row][key_col + quadrant_col]
 
-    return result
+    output = result
+    return output

@@ -23,4 +23,5 @@ def transform(grid):
         result[row][column] = 7
     for row, column, value in payload:
         result[row + row_shift][column + column_shift] = value
-    return result
+    output = result
+    return output

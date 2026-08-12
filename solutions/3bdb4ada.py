@@ -9,4 +9,5 @@ def transform(grid):
         middle = (top + bottom) // 2
         for c in range(left + 1, right, 2):
             result[middle][c] = 0
-    return result
+    output = result
+    return output

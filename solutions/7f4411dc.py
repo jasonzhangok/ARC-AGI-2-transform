@@ -22,4 +22,5 @@ def transform(grid):
                 a,b,d,e=best[1]
                 for x in range(a,b+1):
                     for y in range(d,e+1):out[x][y]=color
-    return out
+    output = out
+    return output

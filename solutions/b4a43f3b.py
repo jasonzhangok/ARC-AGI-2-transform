@@ -6,4 +6,5 @@ def transform(grid):
             if mask[r][c]!=0:
                 for i in range(3):
                     for j in range(3): out[3*r+i][3*c+j]=tile[i][j]
-    return out
+    output = out
+    return output

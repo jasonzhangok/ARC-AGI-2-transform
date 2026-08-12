@@ -1,9 +1,6 @@
-from collections import Counter
-
-
 def transform(grid):
-    height, width = len(grid), len(grid[0])
-    vertical_col = max(range(width), key=lambda c: sum(grid[r][c] == 8 for r in range(height)))
+    height, width = (len(grid), len(grid[0]))
+    vertical_col = max(((sum((grid[r][_item_1] == 8 for r in range(height))), _index_1, _item_1) for _index_1, _item_1 in enumerate(range(width))))[2]
     seeds = []
     for r, row in enumerate(grid):
         colors = [value for c, value in enumerate(row) if c != vertical_col and value != 7]
@@ -12,7 +9,7 @@ def transform(grid):
     result = []
     for r in range(height):
         distances = [(abs(r - seed_row), seed_row, color) for seed_row, color in seeds]
-        minimum = min(distance for distance, _, _ in distances)
+        minimum = min((distance for distance, _, _ in distances))
         nearest = [(seed_row, color) for distance, seed_row, color in distances if distance == minimum]
         if len({color for _, color in nearest}) > 1:
             result.append([1] * width)
@@ -25,4 +22,5 @@ def transform(grid):
             else:
                 row[vertical_col] = 1
             result.append(row)
-    return result
+    output = result
+    return output

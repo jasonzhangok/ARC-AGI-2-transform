@@ -1,17 +1,19 @@
 def transform(grid):
-    out=[row[:] for row in grid]
-    patterns={}
-    for r,row in enumerate(grid):
-        cols=tuple(c for c,v in enumerate(row) if v==2)
-        if len(cols)==2:patterns.setdefault(cols,[]).append(r)
-    for (left,right),rows in patterns.items():
-        if len(rows)<2:continue
-        valid=True
-        for r in range(len(grid)):
-            if r in rows:continue
-            cols=[c for c,v in enumerate(grid[r]) if v==2]
-            if len(cols)==2 and left<cols[0] and cols[1]<right:valid=False
-        if valid:
-            for r in rows:
-                for c in range(left,right+1):out[r][c]=2
-    return out
+    output = [row[:] for row in grid]
+    pairs = []
+    minimum_span = None
+    for row in range(len(grid)):
+        columns = []
+        for col in range(len(grid[0])):
+            if grid[row][col] == 2:
+                columns.append(col)
+        if len(columns) == 2:
+            span = columns[1] - columns[0]
+            pairs.append((row, columns[0], columns[1], span))
+            if minimum_span is None or span < minimum_span:
+                minimum_span = span
+    for row, left, right, span in pairs:
+        if span == minimum_span:
+            for col in range(left, right + 1):
+                output[row][col] = 2
+    return output

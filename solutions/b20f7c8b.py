@@ -31,7 +31,8 @@ def transform(grid):
         left = min(col for _, col in cells)
         legend[color] = {(row - top, col - left) for row, col in cells}
 
-    def canonical(shape):
+    canonical_by_color = {}
+    for color, shape in legend.items():
         variants = []
         current = set(shape)
         for _ in range(4):
@@ -40,9 +41,8 @@ def transform(grid):
                 left = min(col for _, col in reflected)
                 variants.append(tuple(sorted((row - top, col - left) for row, col in reflected)))
             current = {(col, 2 - row) for row, col in current}
-        return min(variants)
-
-    by_shape = {canonical(shape): color for color, shape in legend.items()}
+        canonical_by_color[color] = min(variants)
+    by_shape = {canonical_by_color[color]: color for color in legend}
 
     remaining = {
         (row, col)
@@ -87,7 +87,15 @@ def transform(grid):
                 for row, col in panel
                 if grid[row][col] == 1
             }
-            color = by_shape[canonical(shape)]
+            variants = []
+            current = set(shape)
+            for _ in range(4):
+                for reflected in (current, {(shape_row, 2 - shape_col) for shape_row, shape_col in current}):
+                    shape_top = min(shape_row for shape_row, _ in reflected)
+                    shape_left = min(shape_col for _, shape_col in reflected)
+                    variants.append(tuple(sorted((shape_row - shape_top, shape_col - shape_left) for shape_row, shape_col in reflected)))
+                current = {(shape_col, 2 - shape_row) for shape_row, shape_col in current}
+            color = by_shape[min(variants)]
             for row in range(top, top + 5):
                 for col in range(left, left + 5):
                     output[row][col] = color

@@ -1,15 +1,29 @@
-from collections import Counter
 
 
 def transform(grid):
     height = len(grid)
     width = len(grid[0])
-    background = Counter(value for row in grid for value in row).most_common(1)[0][0]
+    background = {}
+    for cell_value in (value for row in grid for value in row):
+        background[cell_value] = background.get(cell_value, 0) + 1
+    background = max(background, key=background.get)
 
-    top_color = Counter(grid[0][1:-1]).most_common(1)[0][0]
-    bottom_color = Counter(grid[-1][1:-1]).most_common(1)[0][0]
-    left_color = Counter(row[0] for row in grid[1:-1]).most_common(1)[0][0]
-    right_color = Counter(row[-1] for row in grid[1:-1]).most_common(1)[0][0]
+    top_color = {}
+    for cell_value in (grid[0][1:-1]):
+        top_color[cell_value] = top_color.get(cell_value, 0) + 1
+    top_color = max(top_color, key=top_color.get)
+    bottom_color = {}
+    for cell_value in (grid[-1][1:-1]):
+        bottom_color[cell_value] = bottom_color.get(cell_value, 0) + 1
+    bottom_color = max(bottom_color, key=bottom_color.get)
+    left_color = {}
+    for cell_value in (row[0] for row in grid[1:-1]):
+        left_color[cell_value] = left_color.get(cell_value, 0) + 1
+    left_color = max(left_color, key=left_color.get)
+    right_color = {}
+    for cell_value in (row[-1] for row in grid[1:-1]):
+        right_color[cell_value] = right_color.get(cell_value, 0) + 1
+    right_color = max(right_color, key=right_color.get)
     directions = {
         top_color: (-1, 0),
         bottom_color: (1, 0),
@@ -34,10 +48,10 @@ def transform(grid):
             moves[(row, col)] = (target_row, target_col, color)
 
     while moves:
-        target_counts = Counter(
-            (target_row, target_col)
-            for target_row, target_col, _ in moves.values()
-        )
+        target_counts = {}
+        for cell_value in ((target_row, target_col)
+            for target_row, target_col, _ in moves.values()):
+            target_counts[cell_value] = target_counts.get(cell_value, 0) + 1
         moving_sources = set(moves)
         blocked = [
             source

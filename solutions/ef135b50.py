@@ -42,4 +42,5 @@ def transform(grid):
                         and any(y == r for y, _ in components[j])):
                     for c in range(left[3] + 1, right[2]):
                         out[r][c] = 9
-    return out
+    output = out
+    return output

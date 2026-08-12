@@ -7,4 +7,5 @@ def transform(grid):
         list(reversed(row)) + row[:]
         for row in grid
     ]
-    return top + bottom
+    output = top + bottom
+    return output

@@ -43,4 +43,5 @@ def transform(grid):
         result[row][col] = inside
         row += row_step
         col += col_step
-    return result
+    output = result
+    return output

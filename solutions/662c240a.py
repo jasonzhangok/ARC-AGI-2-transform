@@ -20,4 +20,5 @@ def transform(grid):
             best_score = len(variants)
             best_panel = panel
 
-    return [row[:] for row in best_panel]
+    output = [row[:] for row in best_panel]
+    return output

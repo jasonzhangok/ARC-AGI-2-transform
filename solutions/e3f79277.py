@@ -32,4 +32,5 @@ def transform(grid):
         diagonal_col = side - 1 - offset if at_left else 16 - side + offset
         result[row][diagonal_col] = foreground
 
-    return result
+    output = result
+    return output

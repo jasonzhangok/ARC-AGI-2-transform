@@ -6,4 +6,5 @@ def transform(grid):
         a, b = row.index(1), row.index(8)
         lo, hi = sorted((a, b))
         rows.append(row[lo + 1:hi])
-    return rows
+    output = rows
+    return output

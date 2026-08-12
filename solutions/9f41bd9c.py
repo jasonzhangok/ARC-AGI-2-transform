@@ -16,4 +16,5 @@ def transform(grid):
         for c in range(last_base+1,w): out[boundary][c]=9
     else:
         for c in range(last_base+width-1): out[boundary][c]=9
-    return out
+    output = out
+    return output

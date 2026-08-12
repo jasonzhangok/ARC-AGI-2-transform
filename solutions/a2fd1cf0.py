@@ -8,4 +8,5 @@ def transform(grid):
     step = 1 if r3 > r2 else -1
     for r in range(r2 + step, r3, step): out[r][c3] = 8
     out[r2][c2], out[r3][c3] = 2, 3
-    return out
+    output = out
+    return output

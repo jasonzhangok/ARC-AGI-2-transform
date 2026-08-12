@@ -1,6 +1,3 @@
-from collections import deque
-
-
 def transform(grid):
     h, w = len(grid), len(grid[0])
     seen = set(); objects = []
@@ -8,9 +5,9 @@ def transform(grid):
         for c in range(w):
             if grid[r][c] != 6 or (r, c) in seen:
                 continue
-            q = deque([(r, c)]); seen.add((r, c)); cells = []
-            while q:
-                y, x = q.popleft(); cells.append((y, x))
+            q = [(r, c)]; seen.add((r, c)); cells = []; position = 0
+            while position < len(q):
+                y, x = q[position]; position += 1; cells.append((y, x))
                 for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
                     ny, nx = y + dy, x + dx
                     if (0 <= ny < h and 0 <= nx < w and grid[ny][nx] == 6
@@ -24,14 +21,16 @@ def transform(grid):
     tiles = []
     for r0, c0, cells in objects:
         center = (r0 + 1.5, c0 + 1.5)
-        _, _, color = min(markers, key=lambda m: abs(m[0] - center[0]) + abs(m[1] - center[1]))
+        _, _, _, color = min((abs(m[0] - center[0]) + abs(m[1] - center[1]), index, m[0], m[2]) for index, m in enumerate(markers))
         tile = [[color if (r0 + r, c0 + c) in cells else 0 for c in range(4)]
                 for r in range(4)]
         tiles.append((r0, c0, tile))
     row_span = max(r for r, _, _ in tiles) - min(r for r, _, _ in tiles)
     col_span = max(c for _, c, _ in tiles) - min(c for _, c, _ in tiles)
     if col_span >= row_span:
-        tiles.sort(key=lambda item: item[1])
-        return [sum((tile[r] for _, _, tile in tiles), []) for r in range(4)]
-    tiles.sort(key=lambda item: item[0])
-    return [row for _, _, tile in tiles for row in tile]
+        tiles = [item[2] for item in sorted((item[1], index, item) for index, item in enumerate(tiles))]
+        output = [sum((tile[r] for _, _, tile in tiles), []) for r in range(4)]
+    else:
+        tiles = [item[2] for item in sorted((item[1][0], item[0], item[1]) for item in enumerate(tiles))]
+        output = [row for _, _, tile in tiles for row in tile]
+    return output

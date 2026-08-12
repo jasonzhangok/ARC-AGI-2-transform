@@ -4,4 +4,5 @@ def transform(grid):
         for c, value in enumerate(row):
             if value != 0 and c > 0:
                 result[r][c - 1] = value
-    return result
+    output = result
+    return output

@@ -15,4 +15,5 @@ def transform(grid):
                 if part[r][c] != 0:
                     out[r][c] = part[r][c]
                     break
-    return out
+    output = out
+    return output

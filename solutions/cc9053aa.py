@@ -25,6 +25,7 @@ def transform(grid):
         clearance[(row, col)] = nearest
 
     thresholds = sorted(set(clearance.values()), reverse=True)
+    found = False
     for threshold in thresholds:
         if clearance[endpoints[0]] < threshold or clearance[endpoints[1]] < threshold:
             continue
@@ -48,6 +49,7 @@ def transform(grid):
             while cell is not None:
                 output[cell[0]][cell[1]] = 9
                 cell = previous[cell]
-            return output
+            found = True
+            break
 
     return output

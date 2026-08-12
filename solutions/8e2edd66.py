@@ -1,8 +1,10 @@
-from collections import Counter
 
 
 def transform(grid):
-    color = Counter(value for row in grid for value in row if value != 0).most_common(1)[0][0]
+    color = {}
+    for cell_value in (value for row in grid for value in row if value != 0):
+        color[cell_value] = color.get(cell_value, 0) + 1
+    color = max(color, key=color.get)
     inverse = [[color if value == 0 else 0 for value in row] for row in grid]
     output = [[0] * 9 for _ in range(9)]
     for br in range(3):

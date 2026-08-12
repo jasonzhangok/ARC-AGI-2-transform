@@ -6,4 +6,5 @@ def transform(grid):
         if all(grid[r][c] == grid[r][c + candidate] for r in range(len(grid)) for c in range(width - candidate)):
             period = candidate
             break
-    return [[row[c % period] for c in range(len(row))] for row in grid]
+    output = [[row[c % period] for c in range(len(row))] for row in grid]
+    return output

@@ -1,9 +1,9 @@
-from collections import Counter
-
-
 def transform(grid):
-    height, width = len(grid), len(grid[0])
-    background = Counter(value for row in grid for value in row).most_common(1)[0][0]
+    height, width = (len(grid), len(grid[0]))
+    background = {}
+    for cell_value in (value for row in grid for value in row):
+        background[cell_value] = background.get(cell_value, 0) + 1
+    background = max(background, key=background.get)
     columns = []
     for c in range(width):
         cells = [(r, grid[r][c]) for r in range(height) if grid[r][c] != background]
@@ -17,4 +17,5 @@ def transform(grid):
     for (column, _, _), length, color in zip(columns, shifted_lengths, rotated_colors):
         for r in range(height - length, height):
             result[r][column] = color
-    return result
+    output = result
+    return output

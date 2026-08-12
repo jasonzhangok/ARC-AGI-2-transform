@@ -38,15 +38,12 @@ def transform(grid):
 
     output = [[0] * width for _ in range(height)]
 
-    def draw(top, left, pattern):
-        for d_row, d_col in pattern:
-            row = top + d_row
-            col = left + d_col
+    for top, left, pattern in sources:
+        for pattern_row, pattern_col in pattern:
+            row = top + pattern_row
+            col = left + pattern_col
             if 0 <= row < height and 0 <= col < width:
                 output[row][col] = color
-
-    for top, left, pattern in sources:
-        draw(top, left, pattern)
         directions = []
         if any(top <= row < top + 4 and col < left for row, col in markers):
             directions.append((0, -4))
@@ -62,7 +59,11 @@ def transform(grid):
             next_left = left + d_col
             while (next_top < height and next_left < width
                    and next_top + 3 >= 0 and next_left + 3 >= 0):
-                draw(next_top, next_left, pattern)
+                for pattern_row, pattern_col in pattern:
+                    row = next_top + pattern_row
+                    col = next_left + pattern_col
+                    if 0 <= row < height and 0 <= col < width:
+                        output[row][col] = color
                 next_top += d_row
                 next_left += d_col
     return output

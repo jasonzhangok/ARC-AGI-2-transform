@@ -10,4 +10,5 @@ def transform(grid):
         for row in grid
     ]
     doubled_rows = [row + row for row in tile]
-    return doubled_rows + [row[:] for row in doubled_rows]
+    output = doubled_rows + [row[:] for row in doubled_rows]
+    return output

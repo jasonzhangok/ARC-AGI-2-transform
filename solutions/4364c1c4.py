@@ -1,9 +1,9 @@
-from collections import Counter
-
-
 def transform(grid):
-    height, width = len(grid), len(grid[0])
-    background = Counter(value for row in grid for value in row).most_common(1)[0][0]
+    height, width = (len(grid), len(grid[0]))
+    background = {}
+    for cell_value in (value for row in grid for value in row):
+        background[cell_value] = background.get(cell_value, 0) + 1
+    background = max(background, key=background.get)
     components = []
     for color in {value for row in grid for value in row if value != background}:
         remaining = {(r, c) for r in range(height) for c in range(width) if grid[r][c] == color}
@@ -18,7 +18,7 @@ def transform(grid):
                         remaining.remove(neighbor)
                         component.add(neighbor)
                         stack.append(neighbor)
-            components.append((min(r for r, _ in component), color, component))
+            components.append((min((r for r, _ in component)), color, component))
     components.sort()
     result = [row[:] for row in grid]
     for _, _, component in components:
@@ -28,4 +28,5 @@ def transform(grid):
         shift = -1 if index % 2 == 0 else 1
         for r, c in component:
             result[r][c + shift] = color
-    return result
+    output = result
+    return output

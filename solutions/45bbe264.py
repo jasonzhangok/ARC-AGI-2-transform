@@ -14,4 +14,5 @@ def transform(grid):
                 out[r][c] = horizontal
             elif vertical is not None:
                 out[r][c] = vertical
-    return out
+    output = out
+    return output

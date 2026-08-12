@@ -14,4 +14,5 @@ def transform(grid):
     for q in groups:
         color=3 if len(q)==base else 4
         for r,c in q:out[r][c]=color
-    return out
+    output = out
+    return output

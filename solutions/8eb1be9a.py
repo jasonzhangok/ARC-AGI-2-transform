@@ -4,4 +4,5 @@ def transform(grid):
     r0, r1 = min(rows), max(rows)
     motif = [row[:] for row in grid[r0:r1 + 1]]
     period = len(motif)
-    return [motif[(r - r0) % period][:] for r in range(h)]
+    output = [motif[(r - r0) % period][:] for r in range(h)]
+    return output

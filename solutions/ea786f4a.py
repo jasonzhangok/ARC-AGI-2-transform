@@ -4,4 +4,5 @@ def transform(grid):
     for i in range(n):
         out[i][i] = 0
         out[i][n - 1 - i] = 0
-    return out
+    output = out
+    return output

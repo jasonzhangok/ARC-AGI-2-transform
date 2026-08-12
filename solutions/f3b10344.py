@@ -29,8 +29,19 @@ def transform(grid):
             if a[0] != b[0]:
                 continue
             top, bottom = max(a[1], b[1]), min(a[2], b[2])
-            if top < bottom and (a[4] < b[3] or b[4] < a[3]):
+            if (top < bottom and min(a[2] - a[1], b[2] - b[1]) >= 2
+                    and (a[4] < b[3] or b[4] < a[3])):
                 left, right = (a, b) if a[4] < b[3] else (b, a)
+                if (left[2] - left[1] != right[2] - right[1]
+                        and left[1] + left[2] != right[1] + right[2]):
+                    continue
+                alternatives = [other for other in objects
+                                if other[0] == a[0] and other not in (a, b)
+                                and left[4] < other[3]
+                                and max(top, other[1]) <= min(bottom, other[2])]
+                if alternatives and any(abs(other[1] - left[1]) < abs(right[1] - left[1])
+                                        for other in alternatives):
+                    continue
                 blocked = any(
                     other[0] == a[0] and left[4] < other[3]
                     and other[4] < right[3]
@@ -42,8 +53,12 @@ def transform(grid):
                         for c in range(left[4] + 1, right[3]):
                             out[r][c] = 8
             left_edge, right_edge = max(a[3], b[3]), min(a[4], b[4])
-            if left_edge < right_edge and (a[2] < b[1] or b[2] < a[1]):
+            if (left_edge < right_edge and min(a[4] - a[3], b[4] - b[3]) >= 2
+                    and (a[2] < b[1] or b[2] < a[1])):
                 upper, lower = (a, b) if a[2] < b[1] else (b, a)
+                if (upper[4] - upper[3] != lower[4] - lower[3]
+                        and upper[3] + upper[4] != lower[3] + lower[4]):
+                    continue
                 blocked = any(
                     other[0] == a[0] and upper[2] < other[1]
                     and other[2] < lower[1]
@@ -54,4 +69,5 @@ def transform(grid):
                     for r in range(upper[2] + 1, lower[1]):
                         for c in range(left_edge + 1, right_edge):
                             out[r][c] = 8
-    return out
+    output = out
+    return output

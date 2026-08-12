@@ -1,6 +1,3 @@
-from itertools import product
-
-
 def transform(grid):
     height, width = len(grid), len(grid[0])
     seen = set()
@@ -37,10 +34,15 @@ def transform(grid):
             for col_offset in range(4 - shape_width)
         ])
 
-    for chosen in product(*placements):
+    combinations = [()]
+    for choices in placements:
+        combinations = [prefix + (choice,) for prefix in combinations for choice in choices]
+    output = None
+    for chosen in combinations:
         if len(set().union(*chosen)) == 9 and sum(map(len, chosen)) == 9:
             output = [[0] * 3 for _ in range(3)]
             for (color, _), cells in zip(objects, chosen):
                 for row, col in cells:
                     output[row][col] = color
-            return output
+            break
+    return output

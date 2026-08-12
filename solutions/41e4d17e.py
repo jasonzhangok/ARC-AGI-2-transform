@@ -24,4 +24,5 @@ def transform(grid):
         for r in range(height):
             if result[r][center_column] == 8:
                 result[r][center_column] = 6
-    return result
+    output = result
+    return output

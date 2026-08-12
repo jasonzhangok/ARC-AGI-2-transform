@@ -1,36 +1,71 @@
-from collections import deque
-
-
 def transform(grid):
-    h, w = len(grid), len(grid[0])
-    output = [row[:] for row in grid]
-    seen = set()
+    height = len(grid)
+    width = len(grid[0])
+    remaining = set()
+    for row in range(height):
+        for col in range(width):
+            if grid[row][col] == 8:
+                remaining.add((row, col))
     components = []
-    for r in range(h):
-        for c in range(w):
-            if grid[r][c] != 8 or (r, c) in seen:
-                continue
-            queue = deque([(r, c)])
-            seen.add((r, c))
-            component = []
-            while queue:
-                x, y = queue.popleft()
-                component.append((x, y))
-                for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
-                    if 0 <= nx < h and 0 <= ny < w and grid[nx][ny] == 8 and (nx, ny) not in seen:
-                        seen.add((nx, ny))
-                        queue.append((nx, ny))
-            components.append(component)
-    large = [component for component in components if len(component) > 1]
-    for singleton in [component for component in components if len(component) == 1]:
-        x, y = singleton[0]
-        nearest = min(large, key=lambda comp: min(max(abs(x - a), abs(y - b)) for a, b in comp))
-        nearest.append((x, y))
-    for component in large:
-        r0, r1 = min(x for x, _ in component), max(x for x, _ in component)
-        c0, c1 = min(y for _, y in component), max(y for _, y in component)
-        for x in range(r0, r1 + 1):
-            for y in range(c0, c1 + 1):
-                if output[x][y] == 0:
-                    output[x][y] = 2
+    while remaining:
+        start = remaining.pop()
+        component = {start}
+        stack = [start]
+        while stack:
+            row, col = stack.pop()
+            for neighbor in (
+                (row - 1, col),
+                (row + 1, col),
+                (row, col - 1),
+                (row, col + 1),
+            ):
+                if neighbor in remaining:
+                    remaining.remove(neighbor)
+                    component.add(neighbor)
+                    stack.append(neighbor)
+        components.append(component)
+
+    ordered_components = []
+    remaining_indices = set(range(len(components)))
+    while remaining_indices:
+        selected_index = None
+        selected_size = -1
+        for index in remaining_indices:
+            if len(components[index]) > selected_size:
+                selected_index = index
+                selected_size = len(components[index])
+        ordered_components.append(components[selected_index])
+        remaining_indices.remove(selected_index)
+
+    large_components = []
+    for component in ordered_components:
+        selected_cluster = None
+        selected_span = None
+        component_top = min(row for row, col in component)
+        component_bottom = max(row for row, col in component)
+        for index in range(len(large_components)):
+            cluster_top = min(row for row, col in large_components[index])
+            cluster_bottom = max(row for row, col in large_components[index])
+            combined_top = min(component_top, cluster_top)
+            combined_bottom = max(component_bottom, cluster_bottom)
+            combined_span = combined_bottom - combined_top + 1
+            if combined_span <= 4:
+                if selected_span is None or combined_span < selected_span:
+                    selected_cluster = index
+                    selected_span = combined_span
+        if selected_cluster is None:
+            large_components.append(set(component))
+        else:
+            large_components[selected_cluster].update(component)
+
+    output = [row[:] for row in grid]
+    for component in large_components:
+        top = min(row for row, col in component)
+        bottom = max(row for row, col in component)
+        left = min(col for row, col in component)
+        right = max(col for row, col in component)
+        for row in range(top, bottom + 1):
+            for col in range(left, right + 1):
+                if output[row][col] == 0:
+                    output[row][col] = 2
     return output

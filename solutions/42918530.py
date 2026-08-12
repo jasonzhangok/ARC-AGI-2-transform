@@ -1,6 +1,3 @@
-from collections import defaultdict
-
-
 def transform(grid):
     height, width = len(grid), len(grid[0])
     panels = []
@@ -16,7 +13,7 @@ def transform(grid):
             if all(value == color for value in border):
                 panels.append((top, left, color))
 
-    by_color = defaultdict(list)
+    by_color = {}
     for top, left, color in panels:
         mask = {
             (dr, dc)
@@ -24,7 +21,7 @@ def transform(grid):
             for dc in range(1, 4)
             if grid[top + dr][left + dc] == color
         }
-        by_color[color].append((top, left, mask))
+        by_color.setdefault(color, []).append((top, left, mask))
 
     result = [row[:] for row in grid]
     for color, items in by_color.items():
@@ -32,4 +29,5 @@ def transform(grid):
         for top, left, _ in items:
             for dr, dc in template:
                 result[top + dr][left + dc] = color
-    return result
+    output = result
+    return output

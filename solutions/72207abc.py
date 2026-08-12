@@ -4,4 +4,5 @@ def transform(grid):
         gap+=1;pos+=gap
         if pos>=len(grid[r]):break
         out[r][pos]=colors[i%len(colors)];i+=1
-    return out
+    output = out
+    return output

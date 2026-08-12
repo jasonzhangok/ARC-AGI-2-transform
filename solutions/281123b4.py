@@ -6,6 +6,7 @@ def transform(grid):
         output_row = []
         for c in range(4):
             candidates = [row[start + c] for start in starts]
-            output_row.append(max(candidates, key=lambda color: priority[color]))
+            output_row.append(max(((priority[_key_item_1], -_key_index_1, _key_item_1) for _key_index_1, _key_item_1 in enumerate(candidates)))[2])
         result.append(output_row)
-    return result
+    output = result
+    return output

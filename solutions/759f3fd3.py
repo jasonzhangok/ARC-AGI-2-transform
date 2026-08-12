@@ -23,4 +23,5 @@ def transform(grid):
             if result[row_index][column_index] == 0 and radius > 0 and radius % 2 == 0:
                 result[row_index][column_index] = 4
 
-    return result
+    output = result
+    return output

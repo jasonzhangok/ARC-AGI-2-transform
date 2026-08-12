@@ -1,4 +1,3 @@
-from collections import deque
 
 
 def transform(grid):
@@ -15,11 +14,11 @@ def transform(grid):
             color = grid[row][col]
             if color in (0, 8) or (row, col) in seen:
                 continue
-            queue = deque([(row, col)])
+            queue = list([(row, col)])
             seen.add((row, col))
             component = []
             while queue:
-                y, x = queue.popleft()
+                y, x = queue.pop(0)
                 component.append((y, x))
                 for dy, dx in ((-1, 0), (1, 0), (0, -1), (0, 1)):
                     point = (y + dy, x + dx)

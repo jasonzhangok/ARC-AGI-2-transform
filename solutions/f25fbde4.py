@@ -8,4 +8,5 @@ def transform(grid):
     for row in crop:
         expanded = [value for value in row for _ in range(2)]
         out.extend((expanded[:], expanded[:]))
-    return out
+    output = out
+    return output

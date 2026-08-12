@@ -8,4 +8,5 @@ def transform(grid):
                 nr, nc = r + dr, c + dc
                 if 0 <= nr < height and 0 <= nc < width and result[nr][nc] == 0:
                     result[nr][nc] = 1
-    return result
+    output = result
+    return output

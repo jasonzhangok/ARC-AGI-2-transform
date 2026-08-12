@@ -22,4 +22,5 @@ def transform(grid):
     for _, _, _, _, source, _, cells in boxes:
         for r, c in cells:
             result[r][c] = source
-    return result
+    output = result
+    return output

@@ -11,4 +11,5 @@ def transform(grid):
                 if best is None or key>best[0]: best=(key,cells)
     out=[row[:] for row in grid]
     for r,c in (best[1] if best else []): out[r][c]=8
-    return out
+    output = out
+    return output

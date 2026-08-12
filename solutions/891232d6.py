@@ -49,4 +49,5 @@ def transform(grid):
 
             result[row][col] = 6 if row == 0 else 2
 
-    return result
+    output = result
+    return output

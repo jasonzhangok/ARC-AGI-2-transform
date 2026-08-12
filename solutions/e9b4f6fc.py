@@ -32,5 +32,6 @@ def transform(grid):
                 mapping[source] = next(v for v in colors if v != source)
     r0, r1 = min(r for r, _ in main), max(r for r, _ in main)
     c0, c1 = min(c for _, c in main), max(c for _, c in main)
-    return [[mapping.get(grid[r][c], grid[r][c]) for c in range(c0, c1 + 1)]
+    output = [[mapping.get(grid[r][c], grid[r][c]) for c in range(c0, c1 + 1)]
             for r in range(r0, r1 + 1)]
+    return output

@@ -14,4 +14,5 @@ def transform(grid):
             for x in range(r0+1,r1):
                 for y in range(c0+1,c1):
                     if out[x][y]==0:out[x][y]=fill
-    return out
+    output = out
+    return output

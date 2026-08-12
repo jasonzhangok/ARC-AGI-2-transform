@@ -5,4 +5,5 @@ def transform(grid):
             if value == 1:
                 result[r][c] = 0
                 result[-1][c] = 1
-    return result
+    output = result
+    return output

@@ -8,7 +8,7 @@ def transform(grid):
     )
     start = cycle.index(grid[seed_row][seed_col])
 
-    return [
+    output = [
         [
             cycle[
                 (start + abs(row - seed_row) + abs(col - seed_col))
@@ -18,3 +18,4 @@ def transform(grid):
         ]
         for row in range(len(grid))
     ]
+    return output

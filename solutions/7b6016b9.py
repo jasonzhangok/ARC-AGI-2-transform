@@ -14,4 +14,5 @@ def transform(grid):
             if 0 <= p[0] < h and 0 <= p[1] < w and p not in seen and grid[p[0]][p[1]] == 0:
                 seen.add(p)
                 stack.append(p)
-    return out
+    output = out
+    return output

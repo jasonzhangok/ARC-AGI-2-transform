@@ -24,4 +24,5 @@ def transform(grid):
     for cells, color in zip(components, (2, 4, 1)):
         for r, c in cells:
             out[r][c] = color
-    return out
+    output = out
+    return output

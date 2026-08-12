@@ -33,6 +33,8 @@ def transform(grid):
         if sum(grid[row][column] == separator for row in range(height)) >= height - 2:
             divider_columns.append(column)
 
+    output = [row[:] for row in grid]
+    found = False
     for first_row_index in range(len(divider_rows)):
         for second_row_index in range(first_row_index + 1, len(divider_rows)):
             top = divider_rows[first_row_index]
@@ -46,5 +48,13 @@ def transform(grid):
                             and grid[top][right] != separator
                             and grid[bottom][left] != separator
                             and grid[bottom][right] != separator):
-                        return [row[left:right + 1] for row in grid[top:bottom + 1]]
-    return [row[:] for row in grid]
+                        output = [row[left:right + 1] for row in grid[top:bottom + 1]]
+                        found = True
+                        break
+                if found:
+                    break
+            if found:
+                break
+        if found:
+            break
+    return output

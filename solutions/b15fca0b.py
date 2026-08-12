@@ -1,6 +1,3 @@
-from collections import deque
-
-
 def transform(grid):
     height = len(grid)
     width = len(grid[0])
@@ -11,11 +8,14 @@ def transform(grid):
         if grid[row][col] == 2
     ]
 
-    def distances(start):
+    distance_maps = []
+    for start in endpoints:
         result = {start: 0}
-        queue = deque([start])
-        while queue:
-            row, col = queue.popleft()
+        queue = [start]
+        position = 0
+        while position < len(queue):
+            row, col = queue[position]
+            position += 1
             for neighbor in (
                 (row - 1, col),
                 (row + 1, col),
@@ -31,10 +31,8 @@ def transform(grid):
                 ):
                     result[neighbor] = result[row, col] + 1
                     queue.append(neighbor)
-        return result
-
-    from_first = distances(endpoints[0])
-    from_second = distances(endpoints[1])
+        distance_maps.append(result)
+    from_first, from_second = distance_maps
     shortest = from_first[endpoints[1]]
     output = [row[:] for row in grid]
     for row in range(height):

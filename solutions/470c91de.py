@@ -1,9 +1,9 @@
-from collections import Counter
-
-
 def transform(grid):
-    h, w = len(grid), len(grid[0])
-    background = Counter(v for row in grid for v in row).most_common(1)[0][0]
+    h, w = (len(grid), len(grid[0]))
+    background = {}
+    for cell_value in (v for row in grid for v in row):
+        background[cell_value] = background.get(cell_value, 0) + 1
+    background = max(background, key=background.get)
     colors = sorted({v for row in grid for v in row if v not in (background, 8)})
     eights = [(r, c) for r in range(h) for c in range(w) if grid[r][c] == 8]
     objects = []
@@ -14,12 +14,11 @@ def transform(grid):
             if (er, ec) in used:
                 continue
             all_cells = cells + [(er, ec)]
-            r0, r1 = min(r for r, _ in all_cells), max(r for r, _ in all_cells)
-            c0, c1 = min(c for _, c in all_cells), max(c for _, c in all_cells)
+            r0, r1 = (min((r for r, _ in all_cells)), max((r for r, _ in all_cells)))
+            c0, c1 = (min((c for _, c in all_cells)), max((c for _, c in all_cells)))
             if len(all_cells) != (r1 - r0 + 1) * (c1 - c0 + 1):
                 continue
-            if all(grid[r][c] in (color, 8)
-                   for r in range(r0, r1 + 1) for c in range(c0, c1 + 1)):
+            if all((grid[r][c] in (color, 8) for r in range(r0, r1 + 1) for c in range(c0, c1 + 1))):
                 dr = -1 if er == r0 else 1
                 dc = -1 if ec == c0 else 1
                 objects.append((color, r0, r1, c0, c1, dr, dc))
@@ -31,4 +30,5 @@ def transform(grid):
             for c in range(c0 + dc, c1 + dc + 1):
                 if 0 <= r < h and 0 <= c < w:
                     out[r][c] = color
-    return out
+    output = out
+    return output

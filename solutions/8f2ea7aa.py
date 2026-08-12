@@ -1,9 +1,11 @@
-from collections import Counter
 
 
 def transform(grid):
     h, w = len(grid), len(grid[0])
-    color = Counter(value for row in grid for value in row if value != 0).most_common(1)[0][0]
+    color = {}
+    for cell_value in (value for row in grid for value in row if value != 0):
+        color[cell_value] = color.get(cell_value, 0) + 1
+    color = max(color, key=color.get)
     cells = [(r, c) for r in range(h) for c in range(w) if grid[r][c] == color]
     r0, r1 = min(r for r, _ in cells), max(r for r, _ in cells)
     c0, c1 = min(c for _, c in cells), max(c for _, c in cells)

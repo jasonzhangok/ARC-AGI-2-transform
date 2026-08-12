@@ -13,10 +13,15 @@ def transform(grid):
 
     for row in range(height):
         row_cells = [col for cell_row, col in cells if cell_row == row]
-        if len(row_cells) != 1:
+        if not row_cells:
             continue
-        left_boundary = row_cells[0]
+        left_boundary = min(row_cells)
+        if len(row_cells) > 1 and len(row_cells) == mirror_axis - left_boundary + 1:
+            continue
         right_boundary = 2 * mirror_axis - left_boundary
-        for col in range(left_boundary + 1, right_boundary + 1):
+        fill_left = max(row_cells) + 1
+        if len(row_cells) > 1:
+            right_boundary -= len(row_cells) - 1
+        for col in range(fill_left, right_boundary + 1):
             output[row][col] = color
     return output

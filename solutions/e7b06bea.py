@@ -16,4 +16,5 @@ def transform(grid):
         out[r][0] = 5
     for r in range(h):
         out[r][target] = colors[(r // block) % len(colors)]
-    return out
+    output = out
+    return output

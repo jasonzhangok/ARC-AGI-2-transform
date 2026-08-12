@@ -4,4 +4,5 @@ def transform(grid):
     longer_top=len(top)>len(bot);cols=set(top)&set(bot);rows=range(1,sep) if longer_top else range(sep+1,h-1)
     for r in rows:
         for c in cols:out[r][c]=4
-    return out
+    output = out
+    return output

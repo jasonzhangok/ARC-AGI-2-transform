@@ -1,6 +1,3 @@
-from itertools import combinations
-
-
 def transform(grid):
     height = len(grid)
     width = len(grid[0])
@@ -26,10 +23,23 @@ def transform(grid):
                 if cells <= colored:
                     copies.append(cells)
 
-        for choice in combinations(copies, 4):
-            union = set().union(*choice)
-            if sum(map(len, choice)) == len(union) and union == colored:
-                template = shape
+        n = len(copies)
+        done = False
+        for i in range(n):
+            for j in range(i + 1, n):
+                for k in range(j + 1, n):
+                    for l in range(k + 1, n):
+                        choice = [copies[i], copies[j], copies[k], copies[l]]
+                        union = set().union(*choice)
+                        if sum(map(len, choice)) == len(union) and union == colored:
+                            template = shape
+                            done = True
+                            break
+                    if done:
+                        break
+                if done:
+                    break
+            if done:
                 break
         if template is not None:
             break

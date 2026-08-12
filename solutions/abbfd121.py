@@ -1,6 +1,3 @@
-from collections import Counter
-
-
 def transform(grid):
     h, w = len(grid), len(grid[0])
     best = None
@@ -23,24 +20,32 @@ def transform(grid):
                         best = candidate
     _, top, bottom, left, right = best
 
-    def row_agreement(shift):
+    row_scores = []
+    for shift in range(1, h // 2 + 1):
         equal = sum(grid[r][c] == grid[r + shift][c]
                     for r in range(h - shift) for c in range(w))
-        return equal / ((h - shift) * w)
-
-    def column_agreement(shift):
+        row_scores.append((equal / ((h - shift) * w), -shift, shift))
+    column_scores = []
+    for shift in range(1, w // 2 + 1):
         equal = sum(grid[r][c] == grid[r][c + shift]
                     for r in range(h) for c in range(w - shift))
-        return equal / (h * (w - shift))
-
-    row_period = max(range(1, h // 2 + 1), key=row_agreement)
-    column_period = max(range(1, w // 2 + 1), key=column_agreement)
+        column_scores.append((equal / (h * (w - shift)), -shift, shift))
+    row_period = max(row_scores)[2]
+    column_period = max(column_scores)[2]
     pattern = {}
     for r in range(row_period):
         for c in range(column_period):
             values = [grid[nr][nc] for nr in range(h) for nc in range(w)
                       if nr % row_period == r and nc % column_period == c]
-            pattern[r, c] = Counter(values).most_common(1)[0][0]
-    return [[pattern[r % row_period, c % column_period]
+            counts = {}
+            for value in values:
+                counts[value] = counts.get(value, 0) + 1
+            best_value = None
+            for value in counts:
+                if best_value is None or counts[value] > counts[best_value]:
+                    best_value = value
+            pattern[r, c] = best_value
+    output = [[pattern[r % row_period, c % column_period]
              for c in range(left, right + 1)]
             for r in range(top, bottom + 1)]
+    return output

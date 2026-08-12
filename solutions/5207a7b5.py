@@ -11,4 +11,5 @@ def transform(grid):
         right_width = (1 if right_size == 1 and r < 2
                        else max(0, right_size - (r + 1) // 2))
         for c in range(col + 1, min(w, col + 1 + right_width)): out[r][c] = 6
-    return out
+    output = out
+    return output

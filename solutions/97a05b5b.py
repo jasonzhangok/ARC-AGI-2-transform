@@ -1,9 +1,9 @@
-def _components(grid):
-    h, w = len(grid), len(grid[0])
+def transform(grid):
+    grid_height, grid_width = len(grid), len(grid[0])
     seen = set()
-    result = []
-    for r in range(h):
-        for c in range(w):
+    components = []
+    for r in range(grid_height):
+        for c in range(grid_width):
             if grid[r][c] == 0 or (r, c) in seen:
                 continue
             stack = [(r, c)]
@@ -15,33 +15,13 @@ def _components(grid):
                 for dr in (-1, 0, 1):
                     for dc in (-1, 0, 1):
                         nr, nc = cr + dr, cc + dc
-                        if (0 <= nr < h and 0 <= nc < w
+                        if (0 <= nr < grid_height and 0 <= nc < grid_width
                                 and grid[nr][nc] != 0
                                 and (nr, nc) not in seen):
                             seen.add((nr, nc))
                             stack.append((nr, nc))
-            result.append(component)
-    return result
-
-
-def _rotate(pattern):
-    return [list(row) for row in zip(*pattern[::-1])]
-
-
-def _orientations(pattern):
-    result = []
-    for start in (pattern, [row[::-1] for row in pattern]):
-        current = start
-        for _ in range(4):
-            if current not in result:
-                result.append(current)
-            current = _rotate(current)
-    return result
-
-
-def transform(grid):
-    components = _components(grid)
-    target = max(components, key=len)
+            components.append(component)
+    target = max((len(component),-index,component) for index,component in enumerate(components))[2]
     top = min(r for r, _ in target)
     bottom = max(r for r, _ in target)
     left = min(c for _, c in target)
@@ -64,7 +44,13 @@ def transform(grid):
     choices = []
     for pattern in patterns:
         candidates = []
-        for oriented in _orientations(pattern):
+        orientations=[]
+        for start in (pattern,[row[::-1] for row in pattern]):
+            current=start
+            for _ in range(4):
+                if current not in orientations:orientations.append(current)
+                current=[list(row) for row in zip(*current[::-1])]
+        for oriented in orientations:
             ph, pw = len(oriented), len(oriented[0])
             mask = {(r, c) for r in range(ph) for c in range(pw)
                     if oriented[r][c] == 2}
@@ -80,23 +66,20 @@ def transform(grid):
                         candidates.append((oriented, dr, dc, shifted, margin))
         choices.append(candidates)
 
-    complete = []
-
-    def assign(index, covered, selected, score):
-        if index == len(choices):
-            if covered == holes:
-                complete.append((score, selected[:]))
-            return
-        for candidate in choices[index]:
-            if not (candidate[3] & covered):
-                assign(index + 1, covered | candidate[3],
-                       selected + [candidate], score + candidate[4])
-
-    assign(0, set(), [], 0)
-    selected = max(complete, key=lambda item: item[0])[1]
+    complete=[];stack=[(0,set(),[],0)]
+    while stack:
+        index,covered,partial,score=stack.pop()
+        if index==len(choices):
+            if covered==holes:complete.append((score,partial))
+            continue
+        for candidate in reversed(choices[index]):
+            if not candidate[3]&covered:
+                stack.append((index+1,covered|candidate[3],partial+[candidate],score+candidate[4]))
+    selected=max((item[0],-index,item[1]) for index,item in enumerate(complete))[2]
     for pattern, dr, dc, _, _ in selected:
         for r, row in enumerate(pattern):
             for c, value in enumerate(row):
                 if value:
                     out[dr + r][dc + c] = value
-    return out
+    output=out
+    return output

@@ -4,4 +4,5 @@ def transform(grid):
     for r in range(r0,r1+1):
         for c in range(c0,c1+1):
             if out[r][c]==0:out[r][c]=2
-    return out
+    output = out
+    return output

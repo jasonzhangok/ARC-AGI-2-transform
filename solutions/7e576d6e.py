@@ -81,4 +81,5 @@ def transform(grid):
         for r in range(min(current_r, end_r), max(current_r, end_r) + 1):
             result[r][end_c] = path_color
 
-    return result
+    output = result
+    return output

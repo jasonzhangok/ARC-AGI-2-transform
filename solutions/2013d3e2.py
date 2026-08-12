@@ -4,4 +4,5 @@ def transform(grid):
     left, right = min(c for _, c in points), max(c for _, c in points)
     out_height = (bottom - top + 1) // 2
     out_width = (right - left + 1) // 2
-    return [row[left:left + out_width] for row in grid[top:top + out_height]]
+    output = [row[left:left + out_width] for row in grid[top:top + out_height]]
+    return output

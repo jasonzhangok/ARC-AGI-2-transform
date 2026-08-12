@@ -1,4 +1,3 @@
-from collections import Counter
 
 
 def transform(grid):
@@ -9,7 +8,10 @@ def transform(grid):
     cols = sorted(c for _, c in markers)
     r0, r1 = rows[0] + 1, rows[-1] - 1
     c0, c1 = cols[0] + 1, cols[-1] - 1
-    color = Counter(value for row in grid for value in row if value not in (0, 5)).most_common(1)[0][0]
+    color = {}
+    for cell_value in (value for row in grid for value in row if value not in (0, 5)):
+        color[cell_value] = color.get(cell_value, 0) + 1
+    color = max(color, key=color.get)
     for c in range(c0, c1 + 1):
         output[r0][c] = color
         output[r1][c] = color

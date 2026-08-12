@@ -10,4 +10,5 @@ def transform(grid):
         out[r][c0 + 1] = b
         if c1 != c0 + 1:
             out[r][c1] = 0
-    return out
+    output = out
+    return output

@@ -17,4 +17,5 @@ def transform(grid):
                             and (ny, nx) not in seen):
                         seen.add((ny, nx))
                         stack.append((ny, nx))
-    return [[0] for _ in range(count + 1)]
+    output = [[0] for _ in range(count + 1)]
+    return output

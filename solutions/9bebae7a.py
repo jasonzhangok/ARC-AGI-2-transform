@@ -1,31 +1,57 @@
 def transform(grid):
-    out = [row[:] for row in grid]
-    six = [(r, c) for r, row in enumerate(grid) for c, v in enumerate(row) if v == 6]
-    four = [(r, c) for r, row in enumerate(grid) for c, v in enumerate(row) if v == 4]
-    for r, c in six:
-        out[r][c] = 0
-    max_h = max(sum(grid[r][c] == 6 for c in range(len(grid[0]))) for r in range(len(grid)))
-    max_v = max(sum(grid[r][c] == 6 for r in range(len(grid))) for c in range(len(grid[0])))
-    if max_h > max_v:
-        bar_row = max(range(len(grid)), key=lambda r: sum(v == 6 for v in grid[r]))
-        bar_cols = [c for c, v in enumerate(grid[bar_row]) if v == 6]
-        stem_col = max(range(len(grid[0])), key=lambda c: sum(grid[r][c] == 6 for r in range(len(grid))))
-        if stem_col >= (min(bar_cols) + max(bar_cols)) / 2:
-            edge = max(r for r, _ in four)
-            for r, c in four:
-                nr = 2 * edge + 1 - r
-                if 0 <= nr < len(out):
-                    out[nr][c] = 4
+    height = len(grid)
+    width = len(grid[0])
+    marker = []
+    shape = []
+    for row in range(height):
+        for column in range(width):
+            if grid[row][column] == 6:
+                marker.append((row, column))
+            elif grid[row][column] == 4:
+                shape.append((row, column))
+
+    center_row = 0
+    largest_row_count = -1
+    for row in range(height):
+        count = sum(grid[row][column] == 6 for column in range(width))
+        if count > largest_row_count:
+            largest_row_count = count
+            center_row = row
+    center_column = 0
+    largest_column_count = -1
+    for column in range(width):
+        count = sum(grid[row][column] == 6 for row in range(height))
+        if count > largest_column_count:
+            largest_column_count = count
+            center_column = column
+
+    up = center_row - min(row for row, column in marker if column == center_column)
+    down = max(row for row, column in marker if column == center_column) - center_row
+    left = center_column - min(column for row, column in marker if row == center_row)
+    right = max(column for row, column in marker if row == center_row) - center_column
+    arms = [up, down, left, right]
+    longest = arms.index(max(arms))
+
+    top = min(row for row, column in shape)
+    bottom = max(row for row, column in shape)
+    left_edge = min(column for row, column in shape)
+    right_edge = max(column for row, column in shape)
+    output = [row[:] for row in grid]
+    for row, column in marker:
+        output[row][column] = 0
+    for row, column in shape:
+        if longest == 0:
+            new_row = row
+            new_column = 2 * left_edge - 1 - column
+        elif longest == 1:
+            new_row = row
+            new_column = 2 * right_edge + 1 - column
+        elif longest == 2:
+            new_row = 2 * bottom + 1 - row
+            new_column = column
         else:
-            edge = min(r for r, _ in four)
-            for r, c in four:
-                nr = 2 * edge - 1 - r
-                if 0 <= nr < len(out):
-                    out[nr][c] = 4
-    else:
-        edge = max(c for _, c in four)
-        for r, c in four:
-            nc = 2 * edge + 1 - c
-            if 0 <= nc < len(out[0]):
-                out[r][nc] = 4
-    return out
+            new_row = 2 * top - 1 - row
+            new_column = column
+        if 0 <= new_row < height and 0 <= new_column < width:
+            output[new_row][new_column] = 4
+    return output
